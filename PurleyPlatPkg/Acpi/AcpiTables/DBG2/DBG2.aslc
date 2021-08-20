@@ -1,0 +1,103 @@
+/*++
+  This file contains an 'Intel Peripheral Driver' and is        
+  licensed for Intel CPUs and chipsets under the terms of your  
+  license agreement with Intel or your vendor.  This file may   
+  be modified by the user, subject to additional terms of the   
+  license agreement                                             
+--*/
+/*++
+
+Copyright (c)  1999 - 2015 Intel Corporation. All rights reserved
+This software and associated documentation (if any) is furnished
+under a license and may only be used or copied in accordance
+with the terms of the license. Except as permitted by such
+license, no part of this software or documentation may be
+reproduced, stored in a retrieval system, or transmitted in any
+form or by any means without the express written consent of
+Intel Corporation.
+
+
+Module Name:
+
+  Dbg2.c
+
+Abstract:
+
+  This file contains a structure definition for the DBG2.  
+
+--*/
+
+//
+// Statements that include other files
+//
+
+#include <IndustryStandard/Acpi51.h>
+#include <IndustryStandard/DebugPort2Table.h>
+#include <Acpi/Dbg2.h>
+
+
+DBG2_DEBUG_TABLE DBG2 = 
+{
+  {
+    EFI_ACPI_5_1_DEBUG_PORT_2_TABLE_SIGNATURE,
+    sizeof (DBG2_DEBUG_TABLE),
+    0,
+
+    //
+    // Checksum will be updated at runtime
+    //
+    0x00,
+
+    //
+    // It is expected that these values will be programmed at runtime
+    //
+    ' ', ' ', ' ', ' ', ' ', ' ',
+    
+    0,
+    0,
+    0,
+    0,
+
+    //
+    // Beginning of DBG2 specific fields
+    //
+    sizeof(EFI_ACPI_DEBUG_PORT_2_DESCRIPTION_TABLE),
+    1
+  },
+  {
+    EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT_REVISION,
+    sizeof(EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT),
+    1,
+    2,
+    sizeof(EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT) + sizeof(EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE) + 4,
+    0, 
+    0,
+    EFI_ACPI_DBG2_PORT_TYPE_SERIAL,
+    EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_FULL_16550,
+    0, 0,
+    sizeof(EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT),
+    sizeof(EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT) + sizeof(EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE)
+  },
+  {
+    EFI_ACPI_5_1_SYSTEM_IO,
+    16,
+    0,
+    EFI_ACPI_5_1_BYTE,
+    0x3F8
+  },
+  4,
+  "."
+};
+
+VOID*
+ReferenceAcpiTable (
+  VOID
+  )
+
+{
+  //
+  // Reference the table being generated to prevent the optimizer from removing the 
+  // data structure from the exeutable
+  //
+  return (VOID*)&DBG2;
+}

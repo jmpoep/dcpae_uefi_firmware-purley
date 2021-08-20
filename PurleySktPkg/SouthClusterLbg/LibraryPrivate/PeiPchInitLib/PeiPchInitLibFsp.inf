@@ -1,0 +1,135 @@
+## @file
+# Component description file for PCH Init Lib Pei Phase
+#
+# @copyright
+# Copyright (c) 2014 - 2018 Intel Corporation. All rights reserved
+# This software and associated documentation (if any) is furnished
+# under a license and may only be used or copied in accordance
+# with the terms of the license. Except as permitted by the
+# license, no part of this software or documentation may be
+# reproduced, stored in a retrieval system, or transmitted in any
+# form or by any means without the express written consent of
+# Intel Corporation.
+# This file contains an 'Intel Peripheral Driver' and is uniquely
+# identified as "Intel Reference Module" and is licensed for Intel
+# CPUs and chipsets under the terms of your license agreement with
+# Intel or your vendor. This file may be modified by the user, subject
+# to additional terms of the license agreement.
+#
+#@par Specification Reference:
+#
+##
+
+
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = PeiPchInitLib
+  FILE_GUID                      = AB7EB2D3-2D0D-475B-A7ED-97D6D02F3009
+  VERSION_STRING                 = 1.0
+  MODULE_TYPE                    = PEIM
+  LIBRARY_CLASS                  = PchInitLib
+
+
+[LibraryClasses]
+  BaseLib
+  IoLib
+  DebugLib
+  TimerLib
+  MmPciLib
+  PchCycleDecodingLib
+  PchGbeLib
+  PchPcieRpLib
+  PchPcrLib
+  PchSbiAccessLib
+  TraceHubInitLib
+  PchPciExpressHelpersLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  HobLib
+  PeiServicesLib
+  GpioLib
+  GpioPrivateLib
+  #SERVER_BIOS  CpuPlatformLib
+  PeiMeLib
+  PchSmmControlLib
+  PchInitCommonLib
+  PchResetCommonLib
+  PchSmbusCommonLib
+  PchSpiCommonLib
+  PchWdtCommonLib
+  PchHsioLib
+  S3BootScriptLib
+  #SERVER_BIOS CpuCommonLib
+
+
+[Packages]
+MdePkg/MdePkg.dec
+PurleySktPkg/SouthClusterLbg/PchRcPkg.dec
+
+[Sources]
+  PchInitPreMem.c
+  PchSata.c
+  PchInit.c
+  PchDmi.c
+  PchRootPorts.c
+  PchCio2.c
+  PchUsb.c
+  PchXdci.c
+  PchTraceHub.c
+  PchInterruptAssign.c
+  PchLan.c
+  PchLpc.c
+  PchHda.c
+  PchHsio.c
+  PchThermal.c
+  PchSerialIo.c
+  PchScs.c
+  PchIsh.c
+  PchPm.c
+  PchHHsioAx.c    #SERVER_BIOS
+  PchHHsioBx.c
+  PchHHsioDx.c
+  PchLpHsioBx.c
+  PchLpHsioCx.c
+  PchHsioLaneLib.c
+#
+# PCH WDT
+#
+  Wdt.c
+#
+# PCH Reset
+#
+  PchReset.c
+#
+# PCH SPI
+#
+  PchSpi.c
+#
+# PCH SMBus
+#
+  PchSmbus.c
+  PchSmbusArp.c
+
+[Ppis]
+  gPchPolicyPpiGuid                     ## CONSUMES
+  gWdtPpiGuid                           ## PRODUCES
+  gPchResetPpiGuid                      ## PRODUCES
+  gPchResetCallbackPpiGuid              ## CONSUMES
+  gPchSpiPpiGuid                        ## PRODUCES
+  gEfiPeiMemoryDiscoveredPpiGuid        ## CONSUMES
+  gEfiPeiSmbus2PpiGuid                  ## PRODUCES
+  gPchPcieDeviceTablePpiGuid            ## CONSUMES
+  gPchHdaVerbTablePpiGuid               ## CONSUMES
+  gPchHsioPtssTablePpiGuid ## CONSUMES
+  gPchPmcXramOffsetDataPpiGuid ## CONSUMES
+  gEfiEndOfPeiSignalPpiGuid             ## CONSUMES
+  gHeciPpiGuid                          ## CONSUMES
+
+
+[Guids]
+  gEfiSmbusArpMapGuid
+  gPchPolicyHobGuid
+  gPchDeviceTableHobGuid
+  gPchChipsetInitHobGuid
+  gWdtHobGuid
+

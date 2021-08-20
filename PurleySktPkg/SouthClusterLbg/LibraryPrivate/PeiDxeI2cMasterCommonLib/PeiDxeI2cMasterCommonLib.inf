@@ -1,0 +1,49 @@
+## @file
+# Component description file for the I2C port driver.
+#
+# @copyright
+# Copyright (c) 2018 Intel Corporation. All rights reserved
+# This software and associated documentation (if any) is furnished
+# under a license and may only be used or copied in accordance
+# with the terms of the license. Except as permitted by the
+# license, no part of this software or documentation may be
+# reproduced, stored in a retrieval system, or transmitted in any
+# form or by any means without the express written consent of
+# Intel Corporation.
+# This file contains an 'Intel Peripheral Driver' and is uniquely
+# identified as "Intel Reference Module" and is licensed for Intel
+# CPUs and chipsets under the terms of your license agreement with
+# Intel or your vendor. This file may be modified by the user, subject
+# to additional terms of the license agreement.
+# 
+# @par Specification Reference:
+#
+##
+
+[Defines]
+INF_VERSION = 0x00010017
+BASE_NAME = PeiDxeI2cMasterCommonLib
+FILE_GUID = D0E4E669-D467-42af-93D8-21513E226EEA
+VERSION_STRING = 1.0
+MODULE_TYPE = BASE
+LIBRARY_CLASS = I2cMasterCommonLib
+
+
+[LibraryClasses]
+DebugLib
+MmPciLib
+IoLib
+# SERVER_FLAG PciLib
+TimerLib
+PchInfoLib
+
+
+[Packages]
+SkylakeSiPkg/SiPkg.dec
+SkylakeSiPkg/SkylakeSiPrivate.dec
+MdePkg/MdePkg.dec
+
+
+[Sources]
+I2cMasterCommonLib.c
+

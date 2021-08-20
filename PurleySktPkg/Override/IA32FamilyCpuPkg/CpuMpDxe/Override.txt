@@ -1,0 +1,630 @@
+##=================================================================================================
+##########                       Template  Notes                                         ##########
+##=================================================================================================
+##
+####                             Note: zzzzz is Platform ChangeList Number                     ####
+####                                   yyyyy is Platform HSD number                            ####
+####                                   xxxxx is EDKII HSD number                               ####
+####                                   uuuuu is Code Review Number                             ####
+####                                   CC_SERVER is Code Collaborator server URL               ####
+##=================================================================================================
+##
+##  Override text File format definitions:
+##                           Unless in a data field, white space is ignored.
+##                           Line starting with '#' is comment
+##                           Text between () are local line comments
+##                           Data field name is defined by ..NAME..
+##                           Data follows :: till end of line for single line fields
+##                           Data for multi line fields (Name ends with _Begin / _End
+##                                Is all lines between _Begin / End exclusive of the name lines.
+##
+## Valid entries for Limitations, ####
+## Use exact text, separated by comma's
+##
+##  LimitationText    Explanation
+##
+##  PlatformCode      Platform code references
+##  ReferanceCode     Si Reference code references
+##  ServerCommonCode  BP core code that contains ServerCommon references
+##
+##(Full Description of the override reason follows) ####
+## Better to put too much information here than too little
+##   Why is override needed
+##   Why it can not be done in Platform code
+##
+##=================================================================================================
+##  Multiple Overrides in a single driver:
+##
+##    Every Override should have all of the template filled out, if there are multiple overrides
+##     in a single driver, copy the template section and add to the end of the file.
+##     i.e. like this:
+##
+##    Template Notes
+##
+##    Start of Template
+##      Override 1
+##    End of Template
+##    Start of Template
+##      Override 2
+##    End of Template
+##     ...
+##
+##=================================================================================================
+##   Useful URL's:
+##
+##   Override process for BDE is documented in the "Central Park Operations Guide" (CPOG):
+##     https://sharepoint.amr.ith.intel.com/sites/BDE_BIOS/default.aspx
+##      ->BP Server (aka EDKII)
+##      ->Program Management
+##      ->Central Park Operations Guide
+##
+##
+##=================================================================================================
+##########                       Start of Template                                       ##########
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+##
+##-------------------------------------------------------------------------------------------------
+..Original Platform..              :: Purley
+..Core Package Name..              :: IA32FamilyCpuPkg
+..CP Version..                     ::
+..Platform HSD..                   :: s5372787
+..EDKII HSD..                      ::
+..Platform CL..                    ::
+..Create Date..                    :: 11/23/2016
+..Module Name..                    :: IA32FamilyCpuPkg\CpuMpDxe\Eist
+..Override Tag..                   :: PURLEY_OVERRIDE_5372787
+..Code Review URL..                :: https://fm-codecollab.intel.com/ui#review:id=173175
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Fixing issue for when P-states (EIST) are disabled, the P_REQ max frequency was not being restored on
+  s3 resume.  This prevented OS from achieving P1 frequency after S3 resume.
+
+..Description_End..
+
+##
+##-------------------------------------------------------------------------------------------------
+..Original Platform..              :: Purley
+..Core Package Name..              :: IA32FamilyCpuPkg
+..CP Version..                     ::
+..Platform HSD..                   :: s5371439
+..EDKII HSD..                      ::
+..Platform CL..                    ::
+..Create Date..                    :: 10/18/2016
+..Module Name..                    :: IA32FamilyCpuPkg\CpuMpDxe
+..Override Tag..                   :: PURLEY_OVERRIDE_5371439
+..Code Review URL..                :: https://fm-codecollab.intel.com/ui#review:id=166598
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Adding in code to read MSR_CORE_THREAD_COUNT on all threads and store them so that it may
+  be used to properly relay the number of enabled cores from each socket.
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..              :: Purley
+..Core Package Name..              :: IA32FamilyCpuPkg
+..CP Version..                     ::
+..Platform HSD..                   :: s5370421
+..EDKII HSD..                      ::
+..Platform CL..                    ::
+..Create Date..                    :: 05/18/2016
+..Module Name..                    :: IA32FamilyCpuPkg\CpuMpDxe
+..Override Tag..                   :: OVERRIDE_HSD_5370421
+..Code Review URL..                :: https://fm-codecollab.intel.com/ui#review:id=142683
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Pulling in core change to leave BSP the same if all the threads contain same common features instead of changing to be lowest index.
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..              :: Purley
+..Core Package Name..              :: IA32FamilyCpuPkg
+..CP Version..                     ::
+..Platform HSD..                   :: s5370795
+..EDKII HSD..                      ::
+..Platform CL..                    ::
+..Create Date..                    :: 05/10/2016
+..Module Name..                    :: IA32FamilyCpuPkg\CpuMpDxe
+..Override Tag..                   :: OVERIDE_HSD_5370795
+..Code Review URL..                :: https://fm-codecollab.intel.com/ui#review:id=141430
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Purley HSD 5370795: [Platform PO] [2016_WW17 BKC][BIOS: 81_D08] Occasionally System got hang at POST 00 with SKX B0 during reboot cycle tests on Neon City
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		            ::
+..Platform HSD..                        :: s5370118
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 02/24/2016
+..Module Name..                         :: IA32FamilyCpuPkg\CpuMpDxe
+..Override Tag..                        :: OVERIDE_HSD_5370118
+..Code Review URL..                     :: https://fm-codecollab.intel.com/ui#review:id=127718
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Purley HSD 5370118: Windows hangs during boot when Core C6 is disabled
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		            ::
+..Platform HSD..                        :: s5330628
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 08/26/2015
+..Module Name..                         :: IA32FamilyCpuPkg\CpuMpDxe
+..Override Tag..                        :: OVERIDE_HSD_5330628
+..Code Review URL..                     :: https://fm-codecollab.intel.com/ui#review:id=96090
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Rely on MC setup knob to program MC registers
+  
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5331014
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 09/10/2015
+..Module Name..      			:: IA32FamilyCpuPkg\PiSmmCpuDxeSmm\SmmFeatures.c
+..Override Tag..     			:: OVERIDE_HSD_5330336
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Purley HSD 5331014: SKX CoreSV Clone: Cafe: SKX_A0: Bios is incorrectly setting lock bit of SMM_FEATURE_CONTROL_CFG
+
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5330336
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 09/09/2015
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\Misc.c
+..Override Tag..     			:: OVERIDE_HSD_5330336
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Purley HSD 5330336: Aps are not available at OS
+
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5330552
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 07/27/2015
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\Misc.c
+..Override Tag..     			:: BDE Override s5330552
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Enabling NPK_STH_ACPIBAR_BASE causes asserts on multi-core/multi-threaded boots
+
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::190397
+..Platform HSD..                        :: s4929568: Malformed P-states in ACPI tables
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                :: 02/12/2015
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\DataCollection.c
+..Override Tag..     			:: Override for s4929568
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+Added SKYLAKE_SERVER_MODEL_ID in order to fix the issue that Simics responded “CpuMiscData->IntendedFsbFrequency” value “0” case.
+
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4929179
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\CState.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  clear MAX_PKG_C_STATE to 0 when user disable cstate
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4928226
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\CpuSncInit.c/h, Setting.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add SKX CPU SNC support
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4926464
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\CpuSmbios.c, X2Apic.c, CpuConfigLib.h
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add ApicId (>8 bit) override
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\CpuMpDxe.c CpuConfigLib.h, SocketLga1156Lib.h
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add SKX Processor support
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4986587
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\DataCollection.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  distinguishes whether processor supports HT with wrong CPUID.(EAX=01h):EDX[28] function
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4986242
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\ProcessorConfig.c
+..Override Tag..     			:: BDE Override
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  to speed up ucode load time for S3
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4168762, s4985673, s4986321
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\CacheSubClass.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Smbios Type7 64K granularity support
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4168379
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\DataCollection.c, ProcessorConfig.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  HSX P1 can't be greater than 200W
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4168582
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\DataCollection.c, ProcessorConfig.c, MchkInit.c/h
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  workaround WHEA uncorrectable error injector to memory
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Grantley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4168273
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\Analysis.c, DataCollection.c, Peci.c/h,CpuConfigLib.h, SocketLga1156Lib.h
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add Inband PECI support
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Brickland
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\SelectLfp.c
+..Override Tag..     			:: ESS Override
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  support for user SBSP selection
+
+..Description_End..
+
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..               :: Purley
+..Core Package Name..               :: IA32FamilyCpuPkg
+..CP Version..                      :: 3.2.0
+..Platform HSD..                    :: 4930024
+..EDKII HSD..                       :: 4757564
+..Platform CL..                     ::
+..Create Date..                     ::
+..Module Name..                     :: IA32FamilyCpuPkg\CpuMpDxe\Cstate.c
+..Override Tag..                    :: OVERIDE_HSD_4757564_
+..Code Review URL..                 ::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Fix issue with cstate that is non sequential, i.e. a value of 0x202
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5330518
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\Vt.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add SKX Processor support for lock in Crystal Ridge
+
+..Description_End..
+
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4757905
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\SMBIOS\ProcessorData.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Add support for SKX CPU model ID: 0x55 in the function of GetProcessorFamily.
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..       		        ::
+..Platform HSD..                        :: 5332873: First S3 Resume After Flashing a New BIOS: MSR (0x3a) Set Incorrectly
+..EDKII HSD..        	                :: N/A
+..Platform CL..      	                ::
+..Create Date..      	                :: 01/29/2016
+..Module Name..      			:: IA32FamilyCpuPkg\CpuMpDxe\Vt.c
+..Override Tag..     			:: N/A
+..Code Review URL..  			:: 
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+Removing override code that set the lock bit of IA32_FEATURE_CONTROL MSR - not needed here.  Lock
+happens in IIO ReadyToBoot event now and locked for S3 resume in CpuPeim module.
+
+..Description_End..
+
+##=================================================================================================
+##########                       End of Template                                         ##########
+##=================================================================================================

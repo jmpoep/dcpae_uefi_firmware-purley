@@ -1,0 +1,395 @@
+/** @file
+
+  @copyright
+  INTEL CONFIDENTIAL
+  Copyright 2016 - 2018 Intel Corporation. <BR>
+
+  The source code contained or described herein and all documents related to the
+  source code ("Material") are owned by Intel Corporation or its suppliers or
+  licensors. Title to the Material remains with Intel Corporation or its suppliers
+  and licensors. The Material may contain trade secrets and proprietary    and
+  confidential information of Intel Corporation and its suppliers and licensors,
+  and is protected by worldwide copyright and trade secret laws and treaty
+  provisions. No part of the Material may be used, copied, reproduced, modified,
+  published, uploaded, posted, transmitted, distributed, or disclosed in any way
+  without Intel's prior express written permission.
+
+  No license under any patent, copyright, trade secret or other intellectual
+  property right is granted to or conferred upon you by disclosure or delivery
+  of the Materials, either expressly, by implication, inducement, estoppel or
+  otherwise. Any license under such intellectual property rights must be
+  express and approved by Intel in writing.
+
+  Unless otherwise agreed by Intel in writing, you may not remove or alter
+  this notice or any other notice embedded in Materials by Intel or
+  Intel's suppliers or licensors in any way.
+**/
+
+//
+// Statements that include other files
+//
+#include "Acpi/Hmat.h"
+
+EFI_ACPI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE Hmat = {
+  // EFI_ACPI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE_HEADER
+  { 
+    // EFI_ACPI_DESCRIPTION_HEADER 
+    {
+      EFI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE_SIGNATURE,
+      sizeof (EFI_ACPI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE),
+      EFI_ACPI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE_REVISION,
+      0x00,                             // Checksum, updated at runtime
+      {' ', ' ', ' ', ' ', ' ', ' '},   // OEM ID, programmed at runtime
+      0,
+      EFI_ACPI_OEM_HMAT_REVISION,
+      0,
+      0
+    }, // EFI_ACPI_DESCRIPTION_HEADER
+    (UINT32) 0
+  }, // EFI_ACPI_HETEROGENEOUS_MEMORY_ATTRIBUTE_TABLE_HEADER
+
+  // Beginning of HMAT substructures
+#if EFI_ACPI_HMAT_MSARS_COUNT > 0
+  { // MEMORY_SUBSYSTEM_ADDRESS_RANGE_STRUCTURE[EFI_ACPI_HMAT_MSARS_COUNT]
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#if MAX_SOCKET > 1
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 2
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 3
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 4
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 5
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 6
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+#if MAX_SOCKET > 7
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+    MSARS_INIT()
+#endif
+  }, // MEMORY_SUBSYSTEM_ADDRESS_RANGE_STRUCTURE[EFI_ACPI_HMAT_MSARS_COUNT]
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 0
+  { // LATENCY_BANDWIDTH_INFO_STRUCTURE Lbis[EFI_ACPI_HMAT_LBIS_COUNT]
+    LBIS_INIT()
+#if EFI_ACPI_HMAT_LBIS_COUNT > 1
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 2
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 3
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 4
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 5
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 6
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 7
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 8
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 9
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 10
+    LBIS_INIT()
+#endif
+#if EFI_ACPI_HMAT_LBIS_COUNT > 11
+    LBIS_INIT()
+#endif
+  }, // LATENCY_BANDWIDTH_INFO_STRUCTURE Lbis[EFI_ACPI_HMAT_LBIS_COUNT]
+#endif
+#if EFI_ACPI_HMAT_MSCIS_COUNT > 0
+  { // MEMORY_SIDE_CACHE_INFORMATION_STRUCTURE MemSideCache[EFI_ACPI_HMAT_MSCIS_COUNT]
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#if MAX_SOCKET > 1
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 2
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 3
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 4
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 5
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 6
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+#if MAX_SOCKET > 7
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+    MSCIS_INIT()
+#endif
+  }, // MEMORY_SIDE_CACHE_INFORMATION_STRUCTURE MemSideCache[EFI_ACPI_HMAT_MSCIS_COUNT]
+#endif
+};
+
+VOID*
+ReferenceAcpiTable (
+  VOID
+  )
+
+{
+  //
+  // Reference the table being generated to prevent the optimizer from removing the 
+  // data structure from the executable
+  //
+  return (VOID*)&Hmat;
+}

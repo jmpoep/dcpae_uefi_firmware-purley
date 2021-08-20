@@ -1,0 +1,1761 @@
+//
+// This file contains 'Framework Code' and is licensed as such
+// under the terms of your license agreement with Intel or your
+// vendor.  This file may not be modified, except as allowed by
+// additional terms of your license agreement.
+//
+## @file
+# FDF file of platform with 64-bit DXE
+#
+# This package provides platform specific modules.
+# Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.
+#
+#    This software and associated documentation (if any) is furnished
+#    under a license and may only be used or copied in accordance
+#    with the terms of the license. Except as permitted by such
+#    license, no part of this software or documentation may be
+#    reproduced, stored in a retrieval system, or transmitted in any
+#    form or by any means without the express written consent of
+#    Intel Corporation.
+#
+##
+
+[Defines]
+  DEFINE BIOS_ACM_FILENAME         = Purley_BiosacX_v0.53a_20150106_debug_WBG  # Purley ACM signed with Wellsburg
+  DEFINE SINIT_ACM_FILENAME        = Purley_Sinit_v0.53a_20150106_debug_WBG
+
+!if $(PCHTARGET) == "LBG"
+    DEFINE BIOS_ACM_FILENAME         = PURLEY_BIOSACX_v0_6_1_20151019_LBG_debug   #  Purley ACM signed with Lewisburg
+    DEFINE SINIT_ACM_FILENAME        = PURLEY_SINIT_v0_6_1_20151019_LBG_debug
+!endif
+
+!if $(PCHTARGET) == "SPT"
+    DEFINE BIOS_ACM_FILENAME         = PURLEY_BIOSACX_v0_6_0_20150929_SPT_debug   # Purley ACM signed with Lynx Point
+    DEFINE SINIT_ACM_FILENAME        = PURLEY_SINIT_v0_6_0_20150929_SPT_debug
+!endif
+
+DEFINE PLAT_PKG                 = PurleyPlatPkg
+DEFINE RP_PKG                   = PurleyRpPkg
+DEFINE SV_RESTRICTED_PKG        = PurleySvRestrictedPkg
+DEFINE RESTRICTED_PKG           = PurleyRestrictedPkg
+DEFINE SKT_PKG                  = PurleySktPkg
+DEFINE PCH_PKG                  = PchPkg
+DEFINE INTERNAL_PKG             = PurleyInternalPkg
+
+# 0x00000060 = (EFI_FIRMWARE_VOLUME_HEADER. HeaderLength + sizeof (EFI_FFS_FILE_HEADER))
+DEFINE FDF_FIRMWARE_HEADER_SIZE = 0x00000060
+
+#
+# Note: FlashNv PCD naming conventions are as follows:
+#        Note: This should be 100% true of all PCD's in the gCpPlatFlashTokenSpaceGuid space, and for
+#              Others should be examined with an effort to work toward this guideline.
+#       PcdFlash*Base is an address, usually in the range of 0xf* of FD's, note change in FDF spec
+#       PcdFlash*Size is a hex count of the length of the FD or FV
+#       All Fv will have the form 'PcdFlashFv', and all Fd will have the form 'PcdFlashFd'
+#
+#       Also all values will have a PCD assigned so that they can be used in the system, and
+#       the FlashMap edit tool can be used to change the values here, without effecting the code.
+#       This requires all code to only use the PCD tokens to recover the values.
+
+
+################################################################################
+#
+#    FD SECPEI
+#
+# Contains all the SEC and PEI modules
+#
+################################################################################
+
+[FD.SecPei]
+BaseAddress   = 0xFFD00000   |gCpPlatFlashTokenSpaceGuid.PcdFlashFdSecPeiBase                 #The base address of the FLASH Device ( 4G - 3M )
+Size          = 0x00300000   |gCpPlatFlashTokenSpaceGuid.PcdFlashFdSecPeiSize                 #The size in bytes of the FLASH Device ( 3M )
+ErasePolarity = 1
+BlockSize     = 0x10000
+NumBlocks     = 0x30
+
+#0x00000000|0x00260000
+0x00000000|0x00240000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvMrcNormalBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvMrcNormalSize
+#FvMrcNormal
+FV = FVMRCNORMAL
+
+#0x00260000|0x000A0000
+0x00240000|0x000C0000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvSecPeiBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvSecPeiSize
+#FvSecPei
+FV = FVSECPEI
+
+#
+#IFLAH32_START
+#
+
+SET gEfiCpPcPlatTokenSpaceGuid.PcdFvSecRevisionBase = 0xFFD00000
+SET gEfiCpPcPlatTokenSpaceGuid.PcdFvBackupSecRevisionBase = 0
+SET gEfiCpPcPlatTokenSpaceGuid.PcdFvPublicKeyBase = 0xFFD00000
+SET gEfiCpPcPlatTokenSpaceGuid.PcdFvBackupPublicKeyBase = 0
+SET gCpPlatFlashTokenSpaceGuid.PcdBiosSize = 0x1000000
+SET gEfiCpPcPlatTokenSpaceGuid.PcdFlashAreaBaseAddress =0xFF000000   # be same as gCpPlatFlashTokenSpaceGuid.PcdFlashFdMainBase
+#
+#IFLAH32_END
+#
+
+################################################################################
+#
+#    FD Main
+#
+# All DXE modules and other regions
+#
+################################################################################
+[FD.Main]
+BaseAddress   = 0xFF000000     | gCpPlatFlashTokenSpaceGuid.PcdFlashFdMainBase        #The base address of the FLASH Device ( 4G - 16M )
+Size          = 0x00D00000     | gCpPlatFlashTokenSpaceGuid.PcdFlashFdMainSize        #The size in bytes of the FLASH Device ( 16M - 3M )
+ErasePolarity = 1
+BlockSize     = 0x10000
+NumBlocks     = 0xD0
+
+#If ME flash map change ,need update the following PCD
+SET gEfiCpPcPlatTokenSpaceGuid.PcdMEFlashAreaBaseAddress = 0xFE003000
+SET gEfiCpPcPlatTokenSpaceGuid.PcdWholeFlashBase = 0xFE000000
+
+0x00000000|0x007F0000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvMainBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvMainSize
+FV = FVMAIN_COMPACT
+
+0x007F0000|0x00040000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvOemLogoBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvOemLogoSize
+#OEM FV should be minimum 192KB
+FV = OEM_FV
+
+0x00830000|0x00010000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvOaBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvOaSize
+FV = OA_FV
+
+0x00840000|0x00030000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvWheaBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvWheaSize
+FV = FVWHEA
+
+0x00870000|0x0000D000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmHeaderBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmHeaderSize
+DATA = {
+  ## This is the EFI_FIRMWARE_VOLUME_HEADER
+  # ZeroVector []
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  # FileSystemGuid
+  #  {0x423a1bc2, 0x8e10, 0x4f11, {0xac, 0xdb, 0xbd, 0x5d, 0x5b, 0x16, 0x4c, 0x03} }
+  0xC2, 0x1B, 0x3A, 0x42, 0x10, 0x8E, 0x11, 0x4F,
+  0xAC, 0xDB, 0xBD, 0x5D, 0x5B, 0x16, 0x4C, 0x03,
+  # FvLength: 0x50000
+  0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00,
+  #Signature "_FVH"       #Attributes
+  0x5F, 0x46, 0x56, 0x48, 0xFF, 0xFE, 0x04, 0x00,
+  #HeaderLength #CheckSum #ExtHeaderOffset #Reserved #Revision
+  0x48, 0x00, 0xC8, 0xE1, 0x00, 0x00, 0x00, 0x02,
+  #Blockmap[0]: 5 Blocks  0x10000 Bytes / Block
+  0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+  #Blockmap[1]: End
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
+0x0087D000|0x00003000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvPeiPolicyBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvPeiPolicySize
+
+FILE = $(RP_PKG)/sbios.data
+
+0x00880000|0x00040000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmSize
+FILE = $(RESTRICTED_PKG)/OemRoms/$(BIOS_ACM_FILENAME).bin
+
+0x008C0000|0x00040000
+gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase|gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize
+FV = MICROCODE_FV
+
+0x00900000|0x00020000
+gCpPlatFlashTokenSpaceGuid.PcdFlashLBGNSPcieGen3Base|gCpPlatFlashTokenSpaceGuid.PcdFlashLBGNSPcieGen3Size
+FILE = $(RESTRICTED_PKG)/Roms/LBGNSPcieGen3LinkEqDcombined-v000061.rom
+
+# Here has reserved space 3136KB, 0x00C30000 - 0x00920000
+
+# do not add anything between this and the next 4 entries, they are added into one
+0x00C30000|0x0003C000
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
+
+#NV_VARIABLE_STORE
+DATA = {
+  ## This is the EFI_FIRMWARE_VOLUME_HEADER
+  # ZeroVector []
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  # FileSystemGuid: gEfiSystemNvDataFvGuid         =
+  #  { 0xFFF12B8D, 0x7696, 0x4C8B, { 0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50 }}
+  0x8D, 0x2B, 0xF1, 0xFF, 0x96, 0x76, 0x8B, 0x4C,
+  0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50,
+  # FvLength: 0x80000
+  0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
+  #Signature "_FVH"       #Attributes
+  0x5f, 0x46, 0x56, 0x48, 0xff, 0xfe, 0x04, 0x00,
+  #HeaderLength #CheckSum #ExtHeaderOffset #Reserved #Revision
+  0x48, 0x00, 0x2A, 0x09, 0x00, 0x00, 0x00, 0x02,
+  #Blockmap[0]: 8 Blocks * 0x10000 Bytes / Block
+  0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+  #Blockmap[1]: End
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  ## This is the VARIABLE_STORE_HEADER
+  !if $(SECURE_BOOT_ENABLE) == TRUE
+    # Signature: gEfiAuthenticatedVariableGuid = { 0xaaf32c78, 0x947b, 0x439a, { 0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92 } }
+    0x78, 0x2c, 0xf3, 0xaa, 0x7b, 0x94, 0x9a, 0x43,
+    0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92,
+  !else
+    # Signature: gEfiVariableGuid = { 0xddcf3616, 0x3275, 0x4164, { 0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d }}
+    0x16, 0x36, 0xcf, 0xdd, 0x75, 0x32, 0x64, 0x41,
+    0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d,
+  !endif
+  #Size: 0x3C000 (gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize) - 0x48 (size of EFI_FIRMWARE_VOLUME_HEADER) = 0x3BFB8
+  # This can speed up the Variable Dispatch a bit.
+  0xB8, 0xBF, 0x03, 0x00,
+  #FORMATTED: 0x5A #HEALTHY: 0xFE #Reserved: UINT16 #Reserved1: UINT32
+  0x5A, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
+0x00C6C000|0x00002000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvNvStorageEventLogBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvNvStorageEventLogSize
+
+#NV_EVENT_LOG
+
+0x00C6E000|0x00002000
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
+#NV_FTW_WORKING
+DATA = {
+  # EFI_FAULT_TOLERANT_WORKING_BLOCK_HEADER->Signature = gEdkiiWorkingBlockSignatureGuid         =
+  #  { 0x9e58292b, 0x7c68, 0x497d, { 0xa0, 0xce, 0x65,  0x0, 0xfd, 0x9f, 0x1b, 0x95 }}
+  0x2b, 0x29, 0x58, 0x9e, 0x68, 0x7c, 0x7d, 0x49,
+  0xa0, 0xce, 0x65,  0x0, 0xfd, 0x9f, 0x1b, 0x95,
+  # Crc:UINT32            #WorkingBlockValid:1, WorkingBlockInvalid:1, Reserved
+  0xE2, 0x33, 0xF2, 0x03, 0xFE, 0xFF, 0xFF, 0xFF,
+  # WriteQueueSize: UINT64
+  0xE0, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
+0x00C70000|0x00040000
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
+#NV_FTW_SPARE
+
+# Here we reserve this region for BIOS SINIT.
+# BIOS SINIT FV header is at PcdFlashFvSinitHeaderBase
+#
+# BIOS SINIT|0x00050000(header 1B + SINIT 4B)
+# BIOS ACM|0x00050000 (header 1B + ACM 4B) moves to FD.SECPEI range
+
+0x00CB0000|0x0000D000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvSinitHeaderBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvSinitHeaderSize
+
+DATA = {
+  ## This is the EFI_FIRMWARE_VOLUME_HEADER
+  # ZeroVector []
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  # FileSystemGuid
+  #  {0x423a1bc2, 0x8e10, 0x4f11, {0xac, 0xdb, 0xbd, 0x5d, 0x5b, 0x16, 0x4c, 0x03} }
+  0xC2, 0x1B, 0x3A, 0x42, 0x10, 0x8E, 0x11, 0x4F,
+  0xAC, 0xDB, 0xBD, 0x5D, 0x5B, 0x16, 0x4C, 0x03,
+  # FvLength: 0x50000
+  0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00,
+  #Signature "_FVH"       #Attributes
+  0x5F, 0x46, 0x56, 0x48, 0xFF, 0xFE, 0x04, 0x00,
+  #HeaderLength #CheckSum #ExtHeaderOffset #Reserved #Revision
+  0x48, 0x00, 0xC8, 0xE1, 0x00, 0x00, 0x00, 0x02,
+  #Blockmap[0]: 5 Blocks  0x10000 Bytes / Block
+  0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+  #Blockmap[1]: End
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+0x000CBD000|0x00003000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvMainPolicyBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvMainPolicySize
+
+FILE = $(RP_PKG)/sbios.data
+
+#
+#Do not add anything to the next three lines, FitGen needs them as they are
+#
+0x00CC0000|0x00040000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmSinitBase|gCpPlatFlashTokenSpaceGuid.PcdFlashFvAcmSinitSize
+
+FILE = $(RESTRICTED_PKG)/OemRoms/$(SINIT_ACM_FILENAME).bin
+
+
+################################################################################
+#
+#    FD FPGA
+#
+# Contains the FPGA modules
+#
+################################################################################
+
+[FD.FPGA]
+BaseAddress   = 0xFD000000   |gCpPlatFlashTokenSpaceGuid.PcdFlashFdFpgaBase                 #The base address of the FPGA Device ( 4G - 48M )
+Size          = 0x02000000   |gCpPlatFlashTokenSpaceGuid.PcdFlashFdFpgaSize                 #The size in bytes of the FPGA Device ( 32M )
+ErasePolarity = 1
+BlockSize     = 0x10000
+NumBlocks     = 0x200
+
+0x00000000|0x02000000
+gCpPlatFlashTokenSpaceGuid.PcdFlashFvFpgaBbsBase | gCpPlatFlashTokenSpaceGuid.PcdFlashFvFpgaBbsSize
+#FvFpga
+FV = FVFPGA
+
+################################################################################
+#
+# FV Section
+#
+# [FV] section is used to define what components or modules are placed within a flash
+# device file.  This section also defines order the components and modules are positioned
+# within the image.  The [FV] section consists of define statements, set statements and
+# module statements.
+#
+################################################################################
+[FV.FVSECPEI]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 6522280D-28F9-4131-ADC4-F40EBFA45864
+
+################################################################################
+#
+# The INF statements point to EDK component and EDK II module INF files, which will be placed into this FV image.
+# Parsing tools will scan the INF file to determine the type of component or module.
+# The component or module type is used to reference the standard rules
+# defined elsewhere in the FDF file.
+#
+# The format for INF statements is:
+# INF  $(PathAndInfFileName)
+#
+################################################################################
+##
+#  PEI Apriori file example, more PEIM module added later.
+##
+APRIORI PEI {
+#  INF  IntelFrameworkModulePkg/Universal/StatusCode/Pei/StatusCodePei.inf
+  INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
+  INF  MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf
+!if $(TRACE_HUB_DEBUG_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.inf
+!endif
+  INF  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+  INF  CpRcPkg/Universal/RegAccess/Pei/RegAccess.inf
+  INF  $(SKT_PKG)/Override/IA32FamilyCpuPkg/CpuPei/CpuPei.inf
+  INF  MdeModulePkg/Universal/PcatSingleSegmentPciCfg2Pei/PcatSingleSegmentPciCfg2Pei.inf
+
+  INF  UefiCpuPkg/CpuIoPei/CpuIoPei.inf
+
+!if $(ME_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Me/Heci/Pei/HeciInit.inf
+!endif
+
+  INF  $(PCH_PKG)/SiInit/Pei/SiInitPreMem.inf
+  INF  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
+  INF  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
+
+  INF  $(PLAT_PKG)/Platform/Pei/BootMode/BootMode.inf
+  # BPE_1310.400_TODO: check this, or move to plat pkg
+  INF  CpPcPlatPkg/Variable/PlatformVariable/Pei/PlatformVariableInitPei.inf
+  INF  $(RP_PKG)/Platform/Pei/PlatformInfo/PlatformInfo.inf
+}
+
+##
+#  PEI Phase modules
+##
+INF  $(PLAT_PKG)/Platform/Pei/PlatformInit/PlatformEarlyInit.inf
+INF  RuleOverride = LzmaCompress $(PCH_PKG)/SiInit/Pei/SiInit.inf
+
+INF  UefiCpuPkg/SecCore/SecCore.inf
+INF  MdeModulePkg/Core/Pei/PeiMain.inf
+INF  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+INF  CpRcPkg/Universal/RegAccess/Pei/RegAccess.inf
+INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
+INF  MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf
+
+!if $(PERFORMANCE_ENABLE) == TRUE
+  INF $(PLAT_PKG)/Override/MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTablePei/FirmwarePerformancePei.inf
+!endif
+
+INF  CpPlatPkg/Uba/CfgDb/Pei/CfgDbPei.inf
+!include PurleyRpPkg/Uba/UbaPei.fdf
+
+INF  $(RP_PKG)/SystemBoard/Pei/SystemBoardPpi.inf
+!if $(TRACE_HUB_DEBUG_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.inf
+!endif
+
+INF  $(PLAT_PKG)/Platform/Pei/BootMode/BootMode.inf
+
+INF  CpPcPlatPkg/Variable/PlatformVariable/Pei/PlatformVariableInitPei.inf
+
+
+INF  UefiCpuPkg/CpuIoPei/CpuIoPei.inf
+INF  MdeModulePkg/Universal/PcatSingleSegmentPciCfg2Pei/PcatSingleSegmentPciCfg2Pei.inf
+
+
+!if $(ME_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Me/Heci/Pei/HeciInit.inf
+!endif
+INF  $(PCH_PKG)/SiInit/Pei/SiInitPreMem.inf
+INF  $(RP_PKG)/Platform/Pei/PlatformInfo/PlatformInfo.inf
+INF  $(SKT_PKG)/Override/IA32FamilyCpuPkg/CpuPei/CpuPei.inf
+INF  UefiCpuPkg/CpuMpPei/CpuMpPei.inf
+INF  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
+INF  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
+
+#
+# S3 drivers
+#
+# Moved to NormalRecovery
+#TPM
+#INF  SecurityPkg/Tcg/PhysicalPresencePei/PhysicalPresencePei.inf
+#INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+
+
+#UUID
+INF  $(PLAT_PKG)/Platform/Pei/UuidPeiInit/UuidPeiInit.inf
+
+
+
+#
+# Silicon Init Pei modules only, will be placed into high level FVs
+#
+[FV.FVSIINITPEI]
+BlockSize          = 0x10000
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = E1792FD6-4E44-DCBD-9C2C-438C1E1B1723
+
+APRIORI PEI {
+  INF  CpRcPkg/Universal/RegAccess/Pei/RegAccess.inf
+}
+
+INF  CpRcPkg/Universal/RegAccess/Pei/RegAccess.inf
+INF  $(SKT_PKG)/Pei/UncoreInit/UncoreInit.inf
+
+!if $(SPLIT_RECOVERY_FV) == TRUE
+#
+# Recovery functional modules only, will be placed into MRC FVs
+#
+[FV.FVRECOVERYMODULESONLY]
+BlockSize          = 0x10000
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+INF  MdeModulePkg/Bus/Pci/EhciPei/EhciPei.inf
+INF  MdeModulePkg/Bus/Usb/UsbBotPei/UsbBotPei.inf
+INF  MdeModulePkg/Bus/Usb/UsbBusPei/UsbBusPei.inf
+INF  FatPkg/FatPei/FatPei.inf
+
+[FV.FVMRCNORMAL]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 770bf9b6-8afe-4f4c-85e5-893fc3d2606c
+
+#
+# This is a priori to avoid modification of INF files when enabling MRC_OEM_HOOKS_PPI solution.
+#
+APRIORI PEI {
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+  INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+}
+
+INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
+
+!if $(TPM2_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
+  INF  SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+  #INF  ServerCommonPkg/BpHotFix/SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
+!else
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+!endif
+
+#IPMI
+!if $(IPMI_SUPPORT) == TRUE
+  INF  CpPlatPkg/Ipmi/Frb/FrbPei/FrbPei.inf
+!endif
+
+#
+# S3 drivers
+#
+#INF  $(PLAT_PKG)/Cpu/Pei/MpS3/MpS3.inf
+#INF  $(PLAT_PKG)/Acpi/Pei/S3Resume/S3Resume.inf
+INF  UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf
+
+
+!if $(ME_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Me/Heci/Pei/HeciInit.inf
+  INF  $(PLAT_PKG)/Me/Policy/Pei/MePolicyInitPei.inf
+  INF  $(SKT_PKG)/Me/Heci/MeUma/MeUma.inf
+!endif
+
+!if $(IE_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Ie/Policy/Pei/IePolicyInitPei.inf
+  INF  $(SKT_PKG)/Ie/Heci/Pei/IeHeciInit.inf
+!endif
+
+
+#S3 delete
+INF  $(PCH_PKG)/S3Support/S3/PchS3Peim.inf
+#S3 delete
+
+#
+# If MRC is not using the PPI for OEM hooks, including this component would
+# just waste space
+#
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+  INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+
+FILE FV_IMAGE = E27833A7-65F1-9B66-1C4D-991E521B162A {
+  SECTION FV_IMAGE = FVSIINITPEI
+}
+
+
+INF  $(PLAT_PKG)/Platform/Pei/FpgaPlatformInit/FpgaPlatformEarlyInit.inf
+INF  $(SKT_PKG)/Pei/FpgaLoader/FpgaLoader.inf
+
+FILE FV_IMAGE = B3FAFE71-88C9-4c6e-9AEA-729D8CA85243 {
+       SECTION PEI_DEPEX_EXP = {gEfiPeiMemoryDiscoveredPpiGuid AND gEfiPeiBootInRecoveryModePpiGuid}
+       SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+          SECTION FV_IMAGE = FVRECOVERYMODULESONLY
+       }
+     }
+
+[FV.FVMRCRECOVERY]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = a8bd78f8-cb13-4f21-bad2-a03fa38be629
+
+#
+# This is a priori to avoid modification of INF files when enabling MRC_OEM_HOOKS_PPI solution.
+#
+APRIORI PEI {
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+  INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+}
+
+INF  $(PLAT_PKG)/Override/ServerCommonPkg/Universal/GetSec/Pei/TxtPei.inf
+
+#
+# If MRC is not using the PPI for OEM hooks, including this component would
+# just waste space
+#
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+
+FILE FV_IMAGE = E27833A7-65F1-9B66-1C4D-991E521B162A {
+  SECTION FV_IMAGE = FVSIINITPEI
+}
+
+FILE FV_IMAGE = B3FAFE71-88C9-4c6e-9AEA-729D8CA85243 {
+  SECTION PEI_DEPEX_EXP = {gEfiPeiMemoryDiscoveredPpiGuid AND gEfiPeiBootInRecoveryModePpiGuid}
+  SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+    SECTION FV_IMAGE = FVRECOVERYMODULESONLY
+  }
+}
+
+!else
+
+[FV.FVMRCNORMAL]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 770bf9b6-8afe-4f4c-85e5-893fc3d2606c
+
+#
+# This is a priori to avoid modification of INF files when enabling MRC_OEM_HOOKS_PPI solution.
+#
+APRIORI PEI {
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+  INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+}
+
+INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
+
+!if $(TPM2_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
+  INF  SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+  #INF  ServerCommonPkg/BpHotFix/SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
+!else
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+!endif
+
+#IPMI
+!if $(IPMI_SUPPORT) == TRUE
+  INF  CpPlatPkg/Ipmi/Frb/FrbPei/FrbPei.inf
+!endif
+
+#
+# S3 drivers
+#
+#INF  $(PLAT_PKG)/Cpu/Pei/MpS3/MpS3.inf
+#INF  $(PLAT_PKG)/Acpi/Pei/S3Resume/S3Resume.inf
+
+#S3 delete
+# INF   UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf
+#S3 delete
+
+
+!if $(ME_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Me/Heci/Pei/HeciInit.inf
+  INF  $(PLAT_PKG)/Me/Policy/Pei/MePolicyInitPei.inf
+  INF  $(SKT_PKG)/Me/Heci/MeUma/MeUma.inf
+  !if  $(SPS_ENABLE) == TRUE
+    INF  $(SKT_PKG)/Me/Sps/Pei/SpsPei.inf
+  !endif
+  !if $(AMT_ENABLE) == TRUE
+    INF  $(SKT_PKG)/Me/AMT/Platform/Pei/AmtStatusCode/AmtStatusCodePei.inf
+  !endif
+!endif
+
+
+!if $(IE_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Ie/Heci/Pei/IeHeciInit.inf
+  INF  $(PLAT_PKG)/Ie/Policy/Pei/IePolicyInitPei.inf
+!endif
+
+
+#S3 delete
+#INF  $(PCH_PKG)/S3Support/S3/PchS3Peim.inf
+#S3 delete
+
+
+INF  $(PLAT_PKG)/Override/ServerCommonPkg/Universal/GetSec/Pei/TxtPei.inf
+
+INF  $(PLAT_PKG)/Platform/Pei/FpgaPlatformInit/FpgaPlatformEarlyInit.inf
+INF  $(SKT_PKG)/Pei/FpgaLoader/FpgaLoader.inf
+
+
+#
+# If MRC is not using the PPI for OEM hooks, including this component would
+# just waste space
+#
+!if $(MRC_OEM_HOOKS_PPI_SUPPORT) == TRUE
+INF  $(PLAT_PKG)/Platform/Pei/MrcOemHooksPeim/MrcOemHooksPeim.inf
+!endif
+
+FILE FV_IMAGE = E27833A7-65F1-9B66-1C4D-991E521B162A {
+  SECTION FV_IMAGE = FVSIINITPEI
+}
+#S3 add
+INF  UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationPei.inf
+#
+# S3 drivers
+#
+INF  $(SKT_PKG)/Smm/SmmAccessPei/SmmAccessPei.inf
+
+INF UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf
+#S3 add
+
+INF  $(SKT_PKG)/Pei/CrystalRidge/CrystalRidgePeim.inf
+
+#TPM
+INF SecurityPkg/Tcg/PhysicalPresencePei/PhysicalPresencePei.inf
+#INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgPei/TcgPei.inf
+#
+# IFLASH32_START
+#
+  INF RuleOverride = SECURITY_REVISION $(RP_PKG)/Platform/Pei/SecurityRevision/SecurityRevision.inf
+
+#Keep the keys in BB
+FILE FREEFORM = 3FC6CF43-F0C7-4733-B9F0-65F80F930F19 {
+    SECTION RAW = $(PLAT_PKG)/Tool/SignTool/mykey.pbk
+}
+#
+# IFLASH32_END
+#
+
+
+!endif
+
+[FV.FVMAIN]
+BlockSize     = 0x10000
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = CDBB7B35-6833-4ed6-9AB2-57D2ACDDF6F0
+
+  ##
+  #  DXE Phase modules
+  ##
+
+  ##
+  #  DXE Apriori file example, more DXE module added later.
+  ##
+APRIORI DXE {
+  INF  $(PLAT_PKG)/Override/MdeModulePkg/Core/Dxe/DxeMain.inf
+  INF  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+  INF  CpRcPkg/Universal/RegAccess/Dxe/RegAccess.inf
+  INF  CpRcPkg/Universal/RegAccess/Smm/RegAccessSMM.inf
+}
+
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Core/Dxe/DxeMain.inf
+
+#TPM
+INF  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+INF  CpRcPkg/Universal/RegAccess/Dxe/RegAccess.inf
+INF  CpRcPkg/Universal/RegAccess/Smm/RegAccessSMM.inf
+
+INF  MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
+INF  MdeModulePkg/Universal/StatusCodeHandler/RuntimeDxe/StatusCodeHandlerRuntimeDxe.inf
+INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Smm/ReportStatusCodeRouterSmm.inf
+INF  MdeModulePkg/Universal/StatusCodeHandler/Smm/StatusCodeHandlerSmm.inf
+!if $(TRACE_HUB_DEBUG_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.inf
+  INF  $(PLAT_PKG)/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.inf
+!endif
+
+#S3 delete
+# INF  MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf
+#S3 delete
+
+INF  $(PLAT_PKG)/StatusCodeHandlerUsb/RuntimeDxe/StatusCodeHandlerRuntimeDxeUsb.inf
+INF  IntelFrameworkModulePkg/Universal/SectionExtractionDxe/SectionExtractionDxe.inf
+
+!if $(IPMI_SUPPORT) == TRUE
+#INF  CpPlatPkg/Ipmi/GenericIpmi/Dxe/GenericIpmi.inf
+#INF  CpPlatPkg/Ipmi/GenericIpmi/Smm/SmmGenericIpmi.inf
+!endif
+INF  CpPlatPkg/Uba/CfgDb/Dxe/CfgDbDxe.inf
+!include PurleyRpPkg/Uba/UbaDxe.fdf
+INF  $(RP_PKG)/SystemBoard/Dxe/SystemBoardDxe.inf
+INF  $(PLAT_PKG)/Platform/Dxe/PlatformType/PlatformType.inf
+INF  $(PLAT_PKG)/Platform/Dxe/UuidDxe/UuidDxe.inf
+INF  $(PLAT_PKG)/Platform/DxeSmm/BiosGuard/BiosGuardServices.inf
+INF  $(RP_PKG)/Platform/Dxe/SmbiosRpTable/SmbiosRpTable.inf
+INF  $(RP_PKG)/Platform/Dxe/MeSmmProtocolThunk/MeSmmProtocolThunk.inf
+#TODO S3: INF  $(PLAT_PKG)/Platform/Dxe/S3NvramSave/S3NvramSave.inf
+INF  $(PLAT_PKG)/Platform/Dxe/S3NvramSave/S3NvramSave.inf
+INF  $(PLAT_PKG)/Platform/Dxe/PlatformEarlyDxe/PlatformEarlyDxe.inf
+
+
+
+INF  IntelFrameworkModulePkg/Universal/CpuIoDxe/CpuIoDxe.inf
+INF  UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
+INF  MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
+INF  IntelFrameworkModulePkg/Universal/DataHubDxe/DataHubDxe.inf
+INF  $(PLAT_PKG)/Platform/Dxe/FrameworkHiiAlias/FrameworkHiiAlias.inf
+INF  PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
+INF  $(SKT_PKG)/Override/IA32FamilyCpuPkg/CpuArchDxe/CpuArchDxe.inf
+INF  $(PLAT_PKG)/Cpu/Dxe/PlatformCpuPolicy/PlatformCpuPolicy.inf
+#BPE_1310.400_TODO: still need Override?
+INF  $(SKT_PKG)/Override/IA32FamilyCpuPkg/CpuMpDxe/CpuMpDxe.inf
+
+
+INF  MdeModulePkg/Universal/Metronome/Metronome.inf
+INF  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+INF  $(PLAT_PKG)/Override/PcAtChipsetPkg/PcatRealTimeClockRuntimeDxe/PcatRealTimeClockRuntimeDxe.inf
+INF  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+
+INF  $(PLAT_PKG)/Pci/Dxe/PciHostBridge/PciHostBridge.inf
+INF  $(SKT_PKG)/Dxe/PowerManagement/PpmInitialize.inf
+INF  $(SKT_PKG)/Smm/Iio/IioSmm.inf
+
+#S3 add
+INF  $(PLAT_PKG)/Universal/LpcPlatform/LpcPlatform.inf
+INF  $(PLAT_PKG)/Universal/PilotIVPc8374/PilotIVPc8374.inf
+#INF  ServerCommonPkg/Universal/PilotIIIPc8374/PilotIIIPc8374.inf
+#S3 add
+
+INF  $(PLAT_PKG)/Platform/Dxe/ReserveMemory/ReserveMem.inf
+
+INF  $(PLAT_PKG)/Platform/SpiFvbServices/PlatformSpi.inf
+INF  $(PLAT_PKG)/Platform/SpiFvbServices/PlatformSmmSpi.inf
+
+  INF  BpCommonPkg/Csm/LegacyInterruptHookDxe/LegacyInterruptHook.inf
+  INF  BpCommonPkg/Csm/LegacyBiosReverseThunkDxe/LegacyBiosReverseThunk.inf
+  INF  BpCommonPkg/Csm/TcgLegacy/TcgLegacy.inf
+  INF  BpCommonPkg/Csm/TcgLegacy/TcgLegacyInstallInt1A.inf
+
+INF  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteSmm.inf
+
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmm.inf
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  INF  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+!endif
+
+INF  $(PLAT_PKG)/Platform/Pei/MemCacheInit/MemCacheInit.inf
+
+
+INF  MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
+# PURLEY_OVERRIDE_BEGIN_5387253
+INF  RuleOverride = UI $(PLAT_PKG)/Override/ServerCommonPkg/Applications/UiApp/UiApp.inf
+# PURLEY_OVERRIDE_END_5387253
+INF  MdeModulePkg/Application/BootManagerMenuApp/BootManagerMenuApp.inf
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+#TPM when TPM enable, SecurityStubDxe needs to be removed from this FV.
+INF  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+INF  ServerCommonPkg/Universal/OemBadgingDxe/OemBadgingDxe.inf
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
+
+FILE FREEFORM = BAC1001B-ECCC-40c6-990D-E8C19A8E477A {
+    SECTION RAW = $(RESTRICTED_PKG)/OemRoms/$(SINIT_ACM_FILENAME).bin
+  }
+
+
+INF  $(PLAT_PKG)/Override/ServerCommonPkg/Universal/GetSec/Dxe/TxtDxe.inf
+INF  $(SKT_PKG)/Smm/SoftSkuSmm/SoftSkuSmm.inf
+#Soft Sku call back should be after LT Config lock
+INF  $(SKT_PKG)/Dxe/SoftSkuDxe/SoftSkuDxe.inf
+
+INF  $(PLAT_PKG)/Platform/Dxe/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
+INF  $(PLAT_PKG)/Platform/Dxe/Hsti/HstiIhvProviderDxe/HstiIhvProviderDxe.inf
+
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
+INF  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+INF  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+INF  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
+INF  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
+INF  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
+INF  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
+INF  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
+INF  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+INF  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
+INF  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
+
+INF  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
+INF  NetworkPkg/TcpDxe/TcpDxe.inf
+INF  NetworkPkg/Udp6Dxe/Udp6Dxe.inf
+INF  NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
+INF  NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
+
+INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+
+INF  ServerCommonPkg/Csm/BiosThunk/BlockIoDxe/BlockIoDxe.inf
+INF  ServerCommonPkg/Csm/BiosThunk/Snp16Dxe/Snp16Dxe.inf
+INF  ServerCommonPkg/Csm/BiosThunk/VideoDxe/VideoDxe.inf
+
+
+INF  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+INF  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+INF  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+INF  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+INF  IntelFrameworkModulePkg/Universal/Console/VgaClassDxe/VgaClassDxe.inf
+INF  IntelFrameworkModulePkg/Universal/DataHubStdErrDxe/DataHubStdErrDxe.inf
+INF  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
+INF  MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+INF  $(PLAT_PKG)/Legacy/Dxe/LegacyRegion/LegacyRegion2.inf
+INF  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
+FILE DRIVER = 961578FE-B6B7-44c3-AF35-6BC705CD2B1F {
+    SECTION PE32 = FatBinPkg/EnhancedFatDxe/X64/Fat.efi
+  }
+#(Temp WA for Simics for skipping memory test) INF  MdeModulePkg/Universal/MemoryTest/GenericMemoryTestDxe/GenericMemoryTestDxe.inf
+INF  MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
+
+INF  $(PCH_PKG)/PchInit/Dxe/PchInitDxe.inf
+INF  $(PCH_PKG)/Smbus/Dxe/PchSmbusDxe.inf
+INF  $(PCH_PKG)/Smbus/Smm/PchSmbusSmm.inf
+INF  $(PCH_PKG)/LegacyInterrupt/Dxe/LegacyInterrupt.inf
+INF  $(PCH_PKG)/PchSmiDispatcher/Smm/PchSmiDispatcher.inf
+INF  $(PCH_PKG)/PchInit/Smm/PchInitSmm.inf
+INF  $(PCH_PKG)/SmmControl/RuntimeDxe/SmmControl.inf
+INF  $(PCH_PKG)/SataController/Dxe/SataController.inf
+#INF  $(PCH_PKG)/ActiveBiosDxe/ActiveBios.inf
+INF  $(PCH_PKG)/Spi/RuntimeDxe/PchSpiRuntime.inf
+INF  $(PCH_PKG)/Spi/Smm/PchSpiSmm.inf
+INF  $(PCH_PKG)/SerialGpio/Dxe/PchSerialGpio.inf
+INF  $(PCH_PKG)/SmartTimer/Dxe/SmartTimer.inf
+INF  $(PCH_PKG)/Reset/RuntimeDxe/PchResetRuntime.inf
+INF  $(PCH_PKG)/Wdt/Dxe/WdtDxe.inf
+
+INF  $(PLAT_PKG)/Platform/RuntimeDxe/PlatformReset/PlatformReset.inf
+
+#TPM
+INF SecurityPkg/Tcg/MemoryOverwriteControl/TcgMor.inf
+#INF SecurityPkg/Tcg/TcgDxe/TcgDxe.inf
+#INF SecurityPkg/Tcg/TcgConfigDxe/TcgConfigDxe.inf
+
+!if $(TPM2_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigDxe.inf
+  INF  $(PLAT_PKG)/Override/SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf
+  INF  RuleOverride = DRIVER_ACPITABLE $(PLAT_PKG)/Override/SecurityPkg/Tcg/Tcg2Smm/Tcg2Smm.inf
+
+  INF  SecurityPkg/Tcg/TcgDxe/TcgDxe.inf
+  INF  SecurityPkg/Tcg/TcgConfigDxe/TcgConfigDxe.inf
+  INF  RuleOverride = DRIVER_ACPITABLE  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgSmm/TcgSmm.inf
+!else
+  #INF SecurityPkg/Tcg/TcgDxe/TcgDxe.inf
+  INF RuleOverride = DRIVER_ACPITABLE  $(PLAT_PKG)/Override/SecurityPkg/Tcg/TcgSmm/TcgSmm.inf
+!endif
+
+
+#IPMI
+!if $(IPMI_SUPPORT) == TRUE
+  INF  CpPlatPkg/Ipmi/BmcAcpi/Smm/BmcAcpiSwChild.inf
+  INF  CpPlatPkg/Ipmi/BmcElog/Smm/BmcElog.inf
+  INF  CpPlatPkg/Ipmi/GenericElog/Smm/GenericElog.inf
+  INF  CpPlatPkg/Ipmi/IpmiRedirFru/Dxe/IpmiRedirFru.inf
+  INF  CpPlatPkg/Ipmi/OsWdt/OsWdt.inf
+  INF  CpPlatPkg/Ipmi/ServerBmcVariable/Dxe/BmcVariableDriver.inf
+  INF  CpPlatPkg/Ipmi/SolStatus/Dxe/SolStatus.inf
+  INF  CpPlatPkg/Ipmi/Frb/FrbDxe/FrbDriver.inf
+  INF  CpPlatPkg/Ipmi/GenericFru/GenericFru.inf
+!endif
+
+
+#ATA for IDE/AHCI/RAID support
+INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+INF  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  INF  ServerCommonPkg/Csm/IntelRaidAtaAtapiPassThru/IntelRaidAtaAtapiPassThru.inf
+  INF  ServerCommonPkg/Csm/IntelRaidBiosThunk/IntelRaidBiosThunk.inf
+
+!if $(PERFORMANCE_ENABLE) == TRUE
+  INF $(PLAT_PKG)/Override/MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
+  INF $(PLAT_PKG)/Override/MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableSmm/FirmwarePerformanceSmm.inf
+!endif
+
+INF  MdeModulePkg/Bus/Pci/IncompatiblePciDeviceSupportDxe/IncompatiblePciDeviceSupportDxe.inf
+INF  IntelFrameworkModulePkg/Bus/Isa/IsaBusDxe/IsaBusDxe.inf
+INF  IntelFrameworkModulePkg/Bus/Isa/IsaSerialDxe/IsaSerialDxe.inf
+  INF  IntelFrameworkModulePkg/Bus/Isa/IsaFloppyDxe/IsaFloppyDxe.inf
+INF  $(PLAT_PKG)/Override/IntelFrameworkModulePkg/Csm/LegacyBiosDxe/LegacyBiosDxe.inf
+
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  #FILE FREEFORM = CC0F8A3F-3DEA-4376-9679-5426BA0A907E {
+  #  SECTION RAW =$(PLAT_PKG)/Override/SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/Keys/PK
+  #}
+  #FILE FREEFORM = 9FE7DE69-0AEA-470a-B50A-139813649189 {
+  #  SECTION RAW =$(PLAT_PKG)/Override/SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/Keys/KEK
+  #}
+  #FILE FREEFORM = FBF95065-427F-47b3-8077-D13C60710998 {
+  #  SECTION RAW =$(PLAT_PKG)/Override/SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/Keys/DB
+  #}
+  #FILE FREEFORM = 9D7A05E9-F740-44c3-858B-75586A8F9C8E {
+  #  SECTION RAW =$(PLAT_PKG)/Override/SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/Keys/DBX
+  #}
+!endif
+
+
+FILE FREEFORM = 7301762E-4BF3-4b06-ADA0-766041BE36AF {
+  SECTION RAW = $(RESTRICTED_PKG)/Roms/MATROXVIDEOOPROM.BIN
+  SECTION UI = "iBMCVideo"
+  }
+
+
+INF  $(PLAT_PKG)/Platform/Dxe/SyscfgSyncDxe/SyscfgSyncDxe.inf
+INF  $(PLAT_PKG)/Pci/Dxe/PciPlatform/PciPlatform.inf
+INF  $(PLAT_PKG)/Legacy/Dxe/LegacyBiosPlatform/LegacyBiosPlatform.inf
+
+# Crystal Ridge UEFI DXE Driver Binary
+FILE DRIVER = 9CE4325E-003E-11E3-B582-B8AC6F199A57 {
+    SECTION PE32 = $(RESTRICTED_PKG)/OemRoms/IntelDCPersistentMemoryDriver.efi
+    SECTION UI = "NvmDimmDriver"
+}
+
+# Crystal Ridge UEFI HII DXE Driver Binary
+FILE DRIVER = EA9DE6D5-7839-46F7-9E63-4DE8B00E2E5D {
+    SECTION PE32 = $(RESTRICTED_PKG)/OemRoms/IntelDCPersistentMemoryHii.efi
+    SECTION UI = "NvmDimmHii"
+}
+
+
+FILE FREEFORM = BD5D4CA5-674F-4584-8CF9-CE4EA1F54DD1 {
+  SECTION RAW = $(RESTRICTED_PKG)/Roms/SataOrom.bin
+}
+
+FILE DRIVER = 56A1B86F-0D4A-485d-87DE-AD0EBA1C8C2A {
+     SECTION DXE_DEPEX = $(RESTRICTED_PKG)/Roms/OnBoardVideoEfi.depex
+     SECTION PE32  = $(RESTRICTED_PKG)/Roms/OnboardVideoEfi.efi
+     SECTION UI = "iBMCVideoGop"
+}
+
+
+
+INF  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
+#Note Use PCI bus driver supporting SRIOV
+#INF  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+# To support MROM Hook
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+INF  $(PLAT_PKG)/Platform/Dxe/MemorySubClass/MemorySubClass.inf
+INF  MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+INF  $(RP_PKG)/Platform/Dxe/FpkSetup/Dxe/FpkSetup.inf
+INF  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+INF  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+INF  MdeModulePkg/Universal/SmbiosMeasurementDxe/SmbiosMeasurementDxe.inf
+
+INF  MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
+INF  MdeModulePkg/Universal/PlatformDriOverrideDxe/PlatformDriOverrideDxe.inf
+
+FILE APPLICATION = c57ad6b7-0515-40a8-9d21-551652854e37 {
+     SECTION PE32 = ShellBinPkg/UefiShell/X64/Shell.efi
+}
+
+# NVM only LBG
+INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+
+
+
+FILE DRIVER = A1f436EA-A127-4EF8-957C-8048606FF670 {
+    SECTION PE32 = $(RESTRICTED_PKG)/Roms/E0011X7.EFI
+    SECTION UI = "1GNicEFI"
+}
+#SATA RAID
+FILE DRIVER = 6641993a-2cf3-4cac-8506-599cb0276abd {
+  SECTION PE32 = $(RESTRICTED_PKG)/Roms/RaidOprom.efi
+  SECTION UI = "RSTSataEfi"
+}
+
+# Scsi stack
+INF  MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
+
+
+# 4168296: SDP: Legacy DVD boot device disappears from boot device list
+INF  MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+
+!if $(AP_ENABLE) == TRUE
+INF  $(PLAT_PKG)/Acpi/Dxe/AcpiPlatform/AcpiPlatform_AP.inf
+!else
+INF  $(PLAT_PKG)/Acpi/Dxe/AcpiPlatform/AcpiPlatform.inf
+!endif
+
+#S3 delete
+# INF  $(PLAT_PKG)/Universal/LpcPlatform/LpcPlatform.inf
+#S3 delete
+
+INF  $(SKT_PKG)/Smm/Access/SmmAccess.inf
+INF  MdeModulePkg/Core/PiSmmCore/PiSmmIpl.inf
+INF   $(PLAT_PKG)/Override/MdeModulePkg/Core/PiSmmCore/PiSmmCore.inf
+
+INF MdeModulePkg/Universal/SmmCommunicationBufferDxe/SmmCommunicationBufferDxe.inf
+INF  $(SKT_PKG)/Override/IA32FamilyCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
+INF  UefiCpuPkg/CpuIo2Smm/CpuIo2Smm.inf
+
+
+FILE FREEFORM = 7934156D-CFCE-460e-92F5-A07909A59ECA {
+  SECTION RAW =  $(PLAT_PKG)/Platform/DxeSmm/BiosGuard/BiosGuardBinary/BIOS_Guard_module.bin
+  SECTION UI = "BiosGuard"
+}
+
+INF  IntelFrameworkModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2keyboardDxe.inf
+INF  IntelFrameworkModulePkg/Bus/Isa/Ps2MouseDxe/Ps2MouseDxe.inf
+
+INF  MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
+INF  IntelFrameworkModulePkg/Universal/Acpi/AcpiS3SaveDxe/AcpiS3SaveDxe.inf
+
+INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+#S3 add
+INF  MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf
+INF  UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationSmm.inf
+#S3 add
+
+INF  $(PLAT_PKG)/Acpi/DxeSmm/AcpiSmm/AcpiSmmPlatform.inf
+INF  $(PLAT_PKG)/Pci/Dxe/PciHotPlug/PciHotPlug.inf
+
+INF  $(PLAT_PKG)/Platform/Dxe/BreakpointCallbackDxe/BreakpointCallbackDxe.inf
+!if $(ME_ENABLE) == TRUE
+  INF  $(SKT_PKG)/Me/Heci/Dxe/HeciInitDxe.inf
+  INF  $(PLAT_PKG)/Me/Policy/Dxe/MePolicyInitDxe.inf
+!endif
+!if $(IE_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Ie/Policy/Dxe/IePolicyInitDxe.inf
+!endif
+
+INF  $(RP_PKG)/Platform/Dxe/Setup/DxePlatform.inf
+INF  $(PLAT_PKG)/Platform/Dxe/SmbiosMiscDxe/SmbiosMiscDxe.inf
+INF  $(PLAT_PKG)/Platform/Dxe/SmbiosIFWIDxe/SmbiosIFWIDxe.inf
+
+INF  $(PLAT_PKG)/Rsa/BmcSmbiosDxe/BmcSmbiosDxe.inf
+INF  $(PLAT_PKG)/Rsa/RsaBmcDxe/RsaBmcCommands.inf
+INF  $(PLAT_PKG)/Rsa/RsaInit/RsaInit.inf
+INF  $(PLAT_PKG)/Rsa/RsaSmm/RsaSmm.inf
+
+INF  $(SKT_PKG)/Dxe/FpgaInit/FpgaDxe/FpgaDxe.inf
+INF  $(SKT_PKG)/Smm/FpgaInit/FpgaSmm/FpgaSmm.inf
+!if $(AP_ENABLE) == TRUE
+INF  RuleOverride = ACPITABLE  $(PLAT_PKG)/Acpi/AcpiTables/AcpiTables_AP.inf
+!else
+INF  RuleOverride = ACPITABLE  $(PLAT_PKG)/Acpi/AcpiTables/AcpiTables.inf
+!endif
+
+INF  RuleOverride = ACPITABLE  $(PLAT_PKG)/Acpi/BmcAcpiTables/BmcAcpiTables.inf
+INF  $(PLAT_PKG)/Acpi/BmcAcpiDxe/BmcAcpiDxe.inf
+
+INF  $(PLAT_PKG)/Acpi/Dxe/AcpiVtd/AcpiVTD.inf
+INF  $(PLAT_PKG)/Cpu/Dxe/GetCpuInfo/GetCpuInfo.inf
+
+!if $(SIGNED_CAPSULE_ENABLE) == TRUE
+  INF  $(PLAT_PKG)/Override/CpPcPlatPkg/SmiFlashSigned/SmiFlashSigned.inf
+!endif
+
+
+INF  $(SKT_PKG)/Smm/PowerManagement/HwpLvtSmm/HwpLvtSmm.inf
+
+#
+# RAS modules
+#
+!if $(RAS_SUPPORT) == TRUE
+
+
+  !if $(RAS_CPU_ONLINE_OFFLINE_ENABLE) == TRUE
+    INF  $(SKT_PKG)/Smm/Ras/CpuHotAdd/CpuHotAdd.inf
+    INF  $(SKT_PKG)/Smm/Ras/KtiRas/KtiRas.inf
+    INF  $(SKT_PKG)/Smm/Ras/CpuRas/CpuRas.inf
+    INF  $(SKT_PKG)/Smm/Ras/IioRas/IioRas.inf
+    INF  $(PLAT_PKG)/Ras/Smm/HpIOXAccess/HpIOXAccess.inf
+    INF  $(PLAT_PKG)/Ras/Smm/RasInit/RasInit.inf
+  !endif
+
+  INF  $(SKT_PKG)/Dxe/MemRas/$(CLV)MemRas.inf
+  INF  $(SKT_PKG)/Smm/Ras/SmbusRecovery/SmbusRecovery.inf
+  INF  $(SKT_PKG)/Smm/Ras/QuiesceSupport/QuiesceSupport.inf
+  INF  $(PLAT_PKG)/Ras/Smm/PartialMirrorHandler/PartialMirrorHandler.inf
+
+  INF RuleOverride = DRIVER_ACPITABLE $(PLAT_PKG)/Ras/AddressTranslationDsm/AddressTranslationDsm.inf
+
+#
+# Error logging
+#
+  INF  $(PLAT_PKG)/Ras/Whea/IsPlatformSupportWhea/IsPlatformSupportWhea.inf
+  #INF  $(PLAT_PKG)/Ras/Whea/WheaPlatformHooksLib/WheaPlatformHooksLib.inf
+  INF  CpPlatPkg/Whea/WheaSupport/WheaSupport.inf
+  INF  $(PLAT_PKG)/Ras/Whea/WheaErrorInj/WheaErrorInj.inf
+  INF  CpPlatPkg/Whea/WheaElog/WheaElog.inf
+  INF  CpPlatPkg/Whea/WheaPlatformBoot/WheaPlatformBoot.inf
+
+  INF  $(PLAT_PKG)/Ras/Whea/WheaErrorLog/WheaErrorLog.inf
+  INF  $(PLAT_PKG)/Ras/Whea/LastBootErrorLog/LastBootErrorLog.inf
+  INF  $(PLAT_PKG)/Ras/Smm/McBankErrorInjection/McBankErrorInjection.inf
+
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/MainErrorHandler/MainErrorHandler.inf
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/DdrtErrorHandler/DdrtErrorHandler.inf
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/ProcessorErrorHandler/ProcessorErrorHandler.inf
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/FpgaErrorHandler/FpgaErrorHandler.inf
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/ChipsetErrorHandler/$(CLV)PcieErrorHandler$(SPT).inf
+
+  INF  $(PLAT_PKG)/Ras/Smm/ErrHandling/PlatformErrorHandler/PlatformErrorHandler.inf
+  INF  $(PLAT_PKG)/Ras/Emca/EmcaErrorLog/EmcaErrorLog.inf
+  !if $(COMPONENT_LEVEL_VALIDATION_BUILD_ENABLE) == TRUE
+    INF  $(SKT_PKG)/Dxe/RasClvTester/RasClvTester.inf
+    INF  $(SKT_PKG)/Smm/Ras/RasClvHandler/RasClvHandler.inf
+    INF  $(SKT_PKG)/Smm/Restricted/Mem/MrcClvHandler/MrcClvHandler.inf
+  !endif
+!endif
+
+
+INF  $(SKT_PKG)/Dxe/CpuCsrAccess/CpuCsrAccess.inf
+INF  $(SKT_PKG)/Dxe/CpuCsrAccess/CpuCsrAccessSMM.inf
+INF  $(SKT_PKG)/Dxe/NvdimmCommon/NvdimmCommon.inf
+INF  $(SKT_PKG)/Dxe/NvdimmCommon/NvdimmSmbusCommon.inf
+INF  $(SKT_PKG)/Dxe/CrystalRidge/CrystalRidge.inf
+INF  $(SKT_PKG)/Dxe/CrystalRidge/CrystalRidgeSMM.inf
+INF  $(SKT_PKG)/Dxe/JedecNvDimm/JedecNvDimm.inf
+INF  $(SKT_PKG)/Dxe/JedecNvDimm/JedecNvDimmSMM.inf
+#
+# ME Package (Dxe)
+#
+!if $(ME_ENABLE) == TRUE
+  !if $(ME_WS_ENABLE) == TRUE
+    INF  $(PLAT_PKG)/Me/AMT/FwUpdate/MeFwDowngrade/Dxe/MeFwDowngrade.inf
+    !if $(AMT_ENABLE) == TRUE
+      INF  $(PLAT_PKG)/Me/AMT/ActiveManagement/Sol/Dxe/SerialOverLan.inf
+      INF  $(PLAT_PKG)/Me/AMT/ActiveManagement/AlertStandardFormat/Dxe/AlertStandardFormatDxe.inf
+      INF  $(PLAT_PKG)/Me/AMT/ActiveManagement/AmtBootOptions/Dxe/ActiveManagement.inf
+      INF  $(PLAT_PKG)/Me/AMT/BiosExtension/Efi/BiosExtensionLoader/Dxe/BiosExtensionLoader.inf
+      INF  $(PLAT_PKG)/Me/AMT/Platform/Dxe/AmtWrapperDxe/AmtWrapperDxe.inf
+      INF  $(SKT_PKG)/Me/AMT/Platform/Dxe/AsfTable/AsfTable.inf
+      INF  $(PLAT_PKG)/Me/AMT/Platform/Dxe/AmtPetAlert/AmtPetAlert.inf
+      INF  $(SKT_PKG)/Me/AMT/Platform/Dxe/AmtInt16/AmtInt16.inf
+      INF  RuleOverride = LEGACY16 $(SKT_PKG)/Me/AMT/Platform/Dxe/AmtInt16/AmtInt16Csm.inf
+    !endif
+    INF  $(PLAT_PKG)/Me/AMT/Platform/Dxe/MeSmbios/MeSmbios.inf
+    !if $(AMT_ENABLE) == TRUE
+      FILE DRIVER = 9cfd802c-09a1-43d6-8217-aa49c1f90d2c {
+      SECTION PE32 = $(PLAT_PKG)/Me/AMT/BiosExtension/Efi/EfiMEBx/Mebx/Mebx.efi
+      SECTION UI = "Mebx"
+      }
+      FILE DRIVER = b62efbbb-3923-4cb9-a6e8-db818e828a80 {
+        SECTION PE32 = $(PLAT_PKG)/Me/AMT/BiosExtension/Efi/EfiMEBx/MebxSetupBrowser/MebxSetupBrowser.efi
+        SECTION UI = "MebxSetupBrowser"
+    }
+    !endif
+    !if $(ICC_ENABLE) == TRUE
+      INF  $(SKT_PKG)/Me/AMT/Icc/Dxe/IccPlatform.inf
+      FILE DRIVER = 5BBA83E5-F027-4ca7-BFD0-16358CC9E123 {
+        SECTION DXE_DEPEX = $(SKT_PKG)/Me/AMT/Icc/OverClocking/IccOverClocking.depex
+        SECTION PE32 = $(SKT_PKG)/Me/AMT/Icc/OverClocking/IccOverClocking.efi
+        SECTION UI = "IccOverClocking"
+      }
+    !endif
+  !endif
+  # !if $(SPS_ENABLE) == TRUE
+  # As long as .offset.h generation does not handle conditional compilation have to load SPS ASL unconditionaly
+    INF  $(PLAT_PKG)/Me/Sps/Acpi/SpsAcpiHooks.inf
+    !if $(AP_ENABLE) == TRUE
+      INF RuleOverride = ACPITABLE $(PLAT_PKG)/Me/Sps/Acpi/SpsAcpiSsdt_AP.inf
+    !else
+      INF RuleOverride = ACPITABLE $(PLAT_PKG)/Me/Sps/Acpi/SpsAcpiSsdt.inf
+    !endif
+  !if $(SPS_ENABLE) == TRUE
+    INF  $(SKT_PKG)/Me/Sps/Dxe/SpsDxe.inf
+    INF  $(SKT_PKG)/Me/Heci/Smm/HeciSmm.inf
+    INF  $(SKT_PKG)/Me/Sps/Smm/SpsSmm.inf
+    INF  $(SKT_PKG)/Me/Heci/SmmHeci3/MeHeci3Smm.inf
+    !if $(PCHTARGET) == "SPT"
+      INF  $(SKT_PKG)/Me/PtuLoader/PtuLoader.inf
+    !endif
+  !endif
+!endif
+
+INF  $(SKT_PKG)/Dxe/IioInit/IioInit.inf
+
+# Need these until AMI driver is fixed
+
+# UEFI USB stack
+# OVERRIDE_HSD_5330788_BEGIN
+INF  $(PLAT_PKG)/Override/MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
+# OVERRIDE_HSD_5330788_END
+INF  MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
+INF  MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
+INF  MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
+INF  MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
+INF  MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe.inf
+INF  MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
+
+
+INF  $(PLAT_PKG)/Platform/Dxe/ResetTesting/ResetTesting.inf
+
+INF  $(PLAT_PKG)/Platform/Dxe/SocketSetup/SocketSetup.inf
+INF  $(PLAT_PKG)/Platform/Dxe/FpgaSocketSetup/FpgaSktSetup.inf
+
+INF  $(PLAT_PKG)/Platform/Dxe/ForceEfiBoot/ForceEfiBootDxe.inf
+
+INF  $(PLAT_PKG)/Platform/Dxe/OpaPlatCfg/OpaPlatCfg.inf
+
+FILE FREEFORM = 4FD1BC5E-0A53-4501-B913-56D362989E13 {
+    SECTION RAW =  PurleyRestrictedPkg/Roms/hfi1-socket0-configuration.dat
+    SECTION UI = "OPAPlatConfigSkt0"
+}
+
+FILE FREEFORM = 2CAD98FC-1897-4837-B313-E6F095F4F84C {
+    SECTION RAW =  PurleyRestrictedPkg/Roms/hfi1-socket1-configuration.dat
+    SECTION UI = "OPAPlatConfigSkt1"
+}
+
+
+[FV.MICROCODE_FV]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = FALSE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+
+FILE RAW = 197DB236-F856-4924-90F8-CDF12FB875F3 {
+  $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/X64/Microcode.bin
+}
+
+[FV.OEM_FV]
+BlockSize          = 0x10000
+NumBlocks          = 0x4
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 5a515240-d1f1-4c58-9590-27b1f0e86827
+
+
+[FV.OA_FV]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 5e2363c4-3e9e-4203-b873-bb40df46c8e6
+
+[FV.FVMAIN_COMPACT]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 27A72E80-3118-4c0c-8673-AA5B4EFA9613
+
+FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
+       SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+          SECTION FV_IMAGE = FVMAIN
+       }
+     }
+
+[FV.FVWHEA]
+BlockSize          = 0x10000
+NumBlocks          = 0x3
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = d6a1cd70-4b33-4994-a6ea-375f2ccc5437
+
+[FV.FVNVSTORAGE]
+BlockSize          = 0x10000
+NumBlocks          = 0x8
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = fff12b8d-7696-4c8b-a985-2747075b4f50
+
+#will be replaced after build complete
+[FV.DUMMY_SINIT]
+BlockSize          = 0x10000
+NumBlocks          = 0x5
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = F3483B7B-14F0-4d6b-81ED-EAA6291CC10E
+
+#will be replaced after build complete
+[FV.DUMMY_ACM]
+BlockSize          = 0x10000
+NumBlocks          = 0x5
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 11668261-8A8D-47ca-9893-052D24435E59
+
+[FV.HINT_FV]
+BlockSize          = 0x10000
+NumBlocks          = 0x1
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+
+[FV.FVFPGA]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 974650E7-6DFE-4998-A124-CEDEC5C9B47D
+
+#
+# FPGA N4PE and Blue Bitstream binary files
+#
+FILE FREEFORM = 78D87F9A-321E-4a07-875F-8D83A3D06E59 {
+    SECTION RAW = $(RESTRICTED_PKG)/Roms/FpgaBbs/N4PE.bin
+    SECTION UI = "FPGAN4PE"
+  }
+
+FILE FREEFORM = 28B225EF-E6B1-4dc0-8D4D-49EFC857CCDF {
+    SECTION RAW = $(RESTRICTED_PKG)/Roms/FpgaBbs/BBS_GBE.bin
+    SECTION UI = "FPGABBS_GBE"
+  }
+
+FILE FREEFORM = E4D662CD-7CCB-4cb5-AECE-4EEA398FF8E4 {
+    SECTION RAW = $(RESTRICTED_PKG)/Roms/FpgaBbs/BBS_PCIE.bin
+    SECTION UI = "FPGABBS_PCIE"
+  }
+
+[Capsule.Capsule_Boot]
+#
+#
+CAPSULE_GUID  = DA4B2D79-FEE1-42c6-9B56-923633398AEB
+#
+# Header size 0x50 is requested by HintTable.
+#
+CAPSULE_HEADER_SIZE = 0x50
+
+FV = HINT_FV
+FV = FVSECPEI
+FV = FVMAIN_COMPACT
+FV = OEM_FV
+FV = FVMRCNORMAL
+FV = FVNVSTORAGE
+FV = MICROCODE_FV
+FV = FVWHEA
+FV = DUMMY_SINIT
+FV = DUMMY_ACM
+
+
+################################################################################
+#
+# Rules are use with the [FV] section's module INF type to define
+# how an FFS file is created for a given INF file. The following Rule are the default
+# rules for the different module type. User can add the customized rules to define the
+# content of the FFS file.
+#
+################################################################################
+#
+# FFS layout for LegacyUsb R8 modules
+#
+[Rule.Common.BS_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX    DXE_DEPEX Optional      $(INF_OUTPUT)/$(MODULE_NAME).depex
+        PE32     PE32                    $(INF_OUTPUT)/$(MODULE_NAME).efi
+        UI       STRING="$(MODULE_NAME)" Optional
+        VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+#
+# FFS layout for native modules
+#
+[Rule.Common.SEC]
+  FILE SEC = $(NAMED_GUID) RELOCS_STRIPPED {
+    PE32  PE32    Align = 16       $(INF_OUTPUT)/$(MODULE_NAME).efi
+    RAW BIN   Align = 16          |.com
+  }
+
+[Rule.Common.PEI_CORE]
+  FILE PEI_CORE = $(NAMED_GUID)            {
+    PE32       PE32     Align = 32       $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI       STRING="$(MODULE_NAME)" Optional
+    VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM]
+  FILE PEIM = $(NAMED_GUID) {
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     PE32        PE32    Align = 32      $(INF_OUTPUT)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_CORE]
+  FILE DXE_CORE = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_RUNTIME_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.SMM_CORE]
+  FILE SMM_CORE = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_SMM_DRIVER]
+  FILE SMM = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_APPLICATION]
+  FILE APPLICATION = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_APPLICATION.UI]
+  FILE APPLICATION = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="Enter Setup"
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.USER_DEFINED.ACPITABLE]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW ACPI    Optional           |.acpi
+    RAW ASL     Optional           |.aml
+  }
+
+[Rule.Common.DXE_SMM_DRIVER.DRIVER_ACPITABLE]
+  FILE SMM = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+    RAW ACPI  Optional                |.acpi
+    RAW ASL   Optional                |.aml
+  }
+
+[Rule.Common.USER_DEFINED.LEGACY16]
+  FILE FREEFORM = $(NAMED_GUID) {
+     UI  STRING="$(MODULE_NAME)" Optional
+     RAW BIN |.com
+     }
+
+[Rule.Common.USER_DEFINED.LOGO]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW BIN               |.bmp
+  }
+[Rule.Common.PE32_PEIM.LzmaCompress]
+  FILE PEIM = $(NAMED_GUID) {
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF {
+       PE32       PE32   $(INF_OUTPUT)/$(MODULE_NAME).efi
+       UI       STRING="$(MODULE_NAME)" Optional
+       VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+     }
+  }
+
+[Rule.Common.PEIM.LzmaCompress]
+  FILE PEIM = $(NAMED_GUID) {
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF {
+       PE32       PE32   $(INF_OUTPUT)/$(MODULE_NAME).efi
+       UI       STRING="$(MODULE_NAME)" Optional
+       VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+     }
+  }
+
+#
+# IFLASH32_START
+#
+[Rule.Common.USER_DEFINED.SECURITY_REVISION]
+  FILE RAW = $(NAMED_GUID) {
+    RAW   BIN                           |.bin
+  }
+#
+# IFLASH32_END
+#

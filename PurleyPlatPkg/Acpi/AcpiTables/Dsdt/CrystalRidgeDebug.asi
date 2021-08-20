@@ -1,0 +1,322 @@
+/*++
+  This file contains 'Framework Code' and is licensed as such
+  under the terms of your license agreement with Intel or your
+  vendor.  This file may not be modified, except as allowed by
+  additional terms of your license agreement.
+--*/
+/*++
+
+Copyright (c) 2018 Intel Corporation. All rights reserved
+This source code and any documentation accompanying it ("Material") is furnished
+under license and may only be used or copied in accordance with the terms of that
+license.  No license, express or implied, by estoppel or otherwise, to any
+intellectual property rights is granted to you by disclosure or delivery of these
+Materials.  The Materials are subject to change without notice and should not be
+construed as a commitment by Intel Corporation to market, license, sell or support
+any product or technology.  Unless otherwise provided for in the license under which
+this Material is provided, the Material is provided AS IS, with no warranties of
+any kind, express or implied, including without limitation the implied warranties
+of fitness, merchantability, or non-infringement.  Except as expressly permitted by
+the license for the Material, neither Intel Corporation nor its suppliers assumes
+any responsibility for any errors or inaccuracies that may appear herein.  Except
+as expressly permitted by the license for the Material, no part of the Material
+may be reproduced, stored in a retrieval system, transmitted in any form, or
+distributed by any means without the express written consent of Intel Corporation.
+
+
+Module Name:
+
+  CrystalRidgeDebug.asi
+
+Abstract:
+
+  Crystal Ridge Debug facility
+
+--*/
+
+#define _NGN_ACPI_UART_MUTEX_ENABLED
+
+#define DbgPrint(X) DBGP(X)
+#define DbgConcat2(_A1, _A2) Concatenate(_A1, _A2)
+#define DbgConcat3(_A1, _A2, _A3)      DbgConcat2(DbgConcat2(_A1, _A2), _A3)
+#define DbgConcat4(_A1, _A2, _A3, _A4) DbgConcat3(DbgConcat2(_A1, _A2), _A3, _A4)
+#define DbgConcat5(_A1, _A2, _A3, _A4, _A5)      DbgConcat3(DbgConcat3(_A1, _A2, _A3), _A4, _A5)
+#define DbgConcat6(_A1, _A2, _A3, _A4, _A5, _A6) DbgConcat4(DbgConcat3(_A1, _A2, _A3), _A4, _A5, _A6)
+#define DbgConcat7(_A1, _A2, _A3, _A4, _A5, _A6, _A7)      DbgConcat4(DbgConcat4(_A1, _A2, _A3, _A4), _A5, _A6, _A7)
+#define DbgConcat8(_A1, _A2, _A3, _A4, _A5, _A6, _A7, _A8) DbgConcat5(DbgConcat4(_A1, _A2, _A3, _A4), _A5, _A6, _A7, _A8)
+#define DbgConcat9(_A1, _A2, _A3, _A4, _A5, _A6, _A7, _A8, _A9)        DbgConcat5(DbgConcat5(_A1, _A2, _A3, _A4, _A5), _A6, _A7, _A8, _A9)
+#define DbgConcat10(_A1, _A2, _A3, _A4, _A5, _A6, _A7, _A8, _A9, _A10) DbgConcat6(DbgConcat5(_A1, _A2, _A3, _A4, _A5), _A6, _A7, _A8, _A9, _A10)
+
+#define DEBUG_WARN      0x00000002  // Warnings
+#define DEBUG_INFO      0x00000040  // Informational debug messages
+#define DEBUG_VERBOSE   0x00400000  // Detailed debug messages that may
+                                    // significantly impact boot performance
+#define DEBUG_ERROR     0x80000000  // Error
+
+#define DEBUG_INTERFACE_NONE   0
+#define DEBUG_INTERFACE_ACPI   1
+#define DEBUG_INTERFACE_SERIAL 2
+
+#define SERIAL_WAIT_TIME 42
+
+//
+// Debug Print (DBGP)
+//
+// Prints raw debug message to current debug interface.
+//
+Method (DBGP, 1) {
+  switch (ToInteger(DINT)) {
+    case (DEBUG_INTERFACE_ACPI) {
+      Store (Arg0, Debug)
+    }
+    case (DEBUG_INTERFACE_SERIAL) {
+      SR0B (ToBuffer(Arg0))
+      SR0B (ToBuffer("\r\n"))
+    }
+  }
+}
+
+//
+// Debug Core (DBGC)
+//
+// Prints formatted debug message to current debug interface.
+//
+// Input:
+//   Arg0: debug level
+//   Arg1: component (e.g. "FIS"/"DSM")
+//   Arg2: Package containing arguments (all must be Strings)
+//
+Method (DBGC, 3) {
+  if (LNot(And(DLVL, Arg0))) {
+    Return
+  }
+  switch (ToInteger(Arg0)) {
+    case (DEBUG_ERROR) {
+      Store(") ERROR: ", Local7)
+    }
+    case (DEBUG_WARN) {
+      Store(") WARNING: ", Local7)
+    }
+    default {
+      Store("): ", Local7)
+    }
+  }
+  Store (Sizeof(Arg2), Local0)
+  switch (ToInteger(Local0)) {
+    Case (0) {
+      Return
+    }
+    Case (1) {
+      DbgPrint (DbgConcat4 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)) \
+      ))
+    }
+    Case (2) {
+      DbgPrint (DbgConcat5 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)) \
+      ))
+    }
+    Case (3) {
+      DbgPrint (DbgConcat6 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)), \
+                DeRefOf(Index(Arg2, 2)) \
+      ))
+    }
+    Case (4) {
+      DbgPrint (DbgConcat7 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)), \
+                DeRefOf(Index(Arg2, 2)), \
+                DeRefOf(Index(Arg2, 3)) \
+      ))
+    }
+    Case (5) {
+      DbgPrint (DbgConcat8 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)), \
+                DeRefOf(Index(Arg2, 2)), \
+                DeRefOf(Index(Arg2, 3)), \
+                DeRefOf(Index(Arg2, 4)) \
+      ))
+    }
+    Case (6) {
+      DbgPrint (DbgConcat9 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)), \
+                DeRefOf(Index(Arg2, 2)), \
+                DeRefOf(Index(Arg2, 3)), \
+                DeRefOf(Index(Arg2, 4)), \
+                DeRefOf(Index(Arg2, 5)) \
+      ))
+    }
+    Case (7) {
+      DbgPrint (DbgConcat10 ("[CR-ASL] (", Arg1, Local7, \
+                DeRefOf(Index(Arg2, 0)), \
+                DeRefOf(Index(Arg2, 1)), \
+                DeRefOf(Index(Arg2, 2)), \
+                DeRefOf(Index(Arg2, 3)), \
+                DeRefOf(Index(Arg2, 4)), \
+                DeRefOf(Index(Arg2, 5)), \
+                DeRefOf(Index(Arg2, 6)) \
+      ))
+    }
+    Default {
+      DbgPrint (DbgConcat3 ("ERROR: DBGC for ", ToString(Local0), " arguments not implemented!"))
+    }
+  }
+}
+
+#define DEBUG1(_TEMP, _L, _C, _A0) \
+  Store(Package(1) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG2(_TEMP, _L, _C, _A0, _A1) \
+  Store(Package(2) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG3(_TEMP, _L, _C, _A0, _A1, _A2) \
+  Store(Package(3) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  Store(_A2, Index(_TEMP, 2)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG4(_TEMP, _L, _C, _A0, _A1, _A2, _A3) \
+  Store(Package(4) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  Store(_A2, Index(_TEMP, 2)) \
+  Store(_A3, Index(_TEMP, 3)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG5(_TEMP, _L, _C, _A0, _A1, _A2, _A3, _A4) \
+  Store(Package(5) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  Store(_A2, Index(_TEMP, 2)) \
+  Store(_A3, Index(_TEMP, 3)) \
+  Store(_A4, Index(_TEMP, 4)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG6(_TEMP, _L, _C, _A0, _A1, _A2, _A3, _A4, _A5) \
+  Store(Package(6) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  Store(_A2, Index(_TEMP, 2)) \
+  Store(_A3, Index(_TEMP, 3)) \
+  Store(_A4, Index(_TEMP, 4)) \
+  Store(_A5, Index(_TEMP, 5)) \
+  DBGC(_L, _C, _TEMP)
+
+#define DEBUG7(_TEMP, _L, _C, _A0, _A1, _A2, _A3, _A4, _A5, _A6) \
+  Store(Package(7) {}, _TEMP) \
+  Store(_A0, Index(_TEMP, 0)) \
+  Store(_A1, Index(_TEMP, 1)) \
+  Store(_A2, Index(_TEMP, 2)) \
+  Store(_A3, Index(_TEMP, 3)) \
+  Store(_A4, Index(_TEMP, 4)) \
+  Store(_A5, Index(_TEMP, 5)) \
+  Store(_A6, Index(_TEMP, 6)) \
+  DBGC(_L, _C, _TEMP)
+
+
+#if defined(_NGN_ACPI_UART_MUTEX_ENABLED)
+#define ACQUIRE_UART() Acquire(UMTX, 0xFFFF)
+#define RELEASE_UART() Release(UMTX)
+  Mutex (UMTX, 0)
+#else
+#define ACQUIRE_UART()
+#define RELEASE_UART()
+#endif
+
+OperationRegion (SER0, SystemIO, 0x3F8, 6)
+Field (SER0, ByteAcc, NoLock, Preserve)
+{
+  XTHR, 8,
+  XIER, 8,
+  XIIR, 8,
+  XLCR, 8,
+  XMCR, 8,
+  XXDR, 1,
+  XXOE, 1,
+  XXPE, 1,
+  XXFE, 1,
+  XXBI, 1,
+  THRE, 1,
+  TEMT, 1,
+  XZER, 1,
+}
+
+//
+// Serial 0 Write (SR0W)
+//
+// Waits for empty UART buffer and writes single byte to serial port.
+//
+// If UART buffer doesn't empty within SERIAL_WAIT_TIME [us], no action is
+// taken.
+//
+// Input:
+//   Arg0: Byte to write
+//
+Method (SR0W, 1)
+{
+  Store (Zero, Local0)
+  while (LLess (Local0, SERIAL_WAIT_TIME)) {
+    if (LEqual (THRE, 1)) {
+      Break
+    }
+    Stall (1)
+    Increment (Local0)
+  }
+  if (LEqual (Local0, SERIAL_WAIT_TIME)) {
+    Return ()
+  }
+  Store(Arg0, XTHR)
+}
+
+//
+// Serial 0 Flush (SR0F)
+//
+// Waits until UART buffer empty or timeout.
+//
+Method (SR0F)
+{
+  Store (Zero, Local0)
+  while (LLess (Local0, SERIAL_WAIT_TIME)) {
+    if (LEqual (THRE, 1)) {
+      Break
+    }
+    Stall (1)
+    Increment (Local0)
+  }
+}
+
+//
+// Serial 0 write Buffer (SR0B)
+//
+// Writes buffer to serial port 0 except the last byte.
+//
+// Input:
+//   Arg0: Buffer to write
+//
+Method (SR0B, 1)
+{
+  Store (SizeOf (Arg0), Local0)
+  if (LEqual (Local0, Zero)) {
+    Return ()
+  }
+  Decrement (Local0)
+  Store (Zero, Local1)
+  ACQUIRE_UART ()
+  while (LLess (Local1, Local0)) {
+    SR0W (DeRefOf (Index (Arg0, Local1)))
+    Increment (Local1)
+  }
+  SR0F ()
+  RELEASE_UART ()
+}

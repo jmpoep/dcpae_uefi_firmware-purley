@@ -1,0 +1,252 @@
+/*++
+  This file contains 'Framework Code' and is licensed as such
+  under the terms of your license agreement with Intel or your
+  vendor.  This file may not be modified, except as allowed by
+  additional terms of your license agreement.
+--*/
+/*++
+
+Copyright (c) 2014 - 2017 Intel Corporation. All rights reserved
+This source code and any documentation accompanying it ("Material") is furnished
+under license and may only be used or copied in accordance with the terms of that
+license.  No license, express or implied, by estoppel or otherwise, to any
+intellectual property rights is granted to you by disclosure or delivery of these
+Materials.  The Materials are subject to change without notice and should not be
+construed as a commitment by Intel Corporation to market, license, sell or support
+any product or technology.  Unless otherwise provided for in the license under which
+this Material is provided, the Material is provided AS IS, with no warranties of
+any kind, express or implied, including without limitation the implied warranties
+of fitness, merchantability, or non-infringement.  Except as expressly permitted by
+the license for the Material, neither Intel Corporation nor its suppliers assumes
+any responsibility for any errors or inaccuracies that may appear herein.  Except
+as expressly permitted by the license for the Material, no part of the Material
+may be reproduced, stored in a retrieval system, transmitted in any form, or
+distributed by any means without the express written consent of Intel Corporation.
+
+
+Module Name:
+
+  JedecNvdimm.asi
+
+Abstract:
+
+  JEDEC-compliant NVDIMM ACPI implementation
+
+--*/
+
+  //
+  // _LSI method implementation
+  //
+  Method (JLSI, 1) {
+    Return (Package () {LABEL_STORAGE_FAILURE, 0, 0})
+  }
+
+  //
+  // _LSR method implementation
+  //
+  Method (JLSR, 3) {
+    Return (Package () {LABEL_STORAGE_FAILURE, Buffer () {0}})
+  }
+
+  //
+  // _LSW method implementation
+  //
+  Method (JLSW, 4) {
+    Return (LABEL_STORAGE_FAILURE)
+  }
+
+  //
+  // Process leaf notifications pre SWGPE disable
+  //
+  Method (JLPR, 0) {
+    Return (Package () {0, 0})
+  }
+
+  //
+  // Process root notifications pre SWGPE disable
+  //
+  Method (JRPR, 0) {
+    Return (0)
+  }
+
+  //
+  // Process leaf notifications post SWGPE disable
+  //
+  Method (JLPT, 1) {
+    Store (Package () {0, 0}, Local0)
+    Store (DBM0, Index (Local0, 0))
+    Store (DBM1, Index (Local0, 1))
+    Return (Local0)
+  }
+
+  //
+  // Process root notifications post SWGPE disable
+  //
+  Method (JRPT, 1) {
+    Return (0)
+  }
+
+  //
+  // Leaf DSM implementation
+  //
+  Method (JNLD, 5, Serialized) {
+    // CR commands supported
+    // Arg0: DSM GUID Supported
+    // Arg1: Revision
+    // Arg2: Function Index
+    // Arg3: Input Buffer
+    // Arg4: _ADR in a form of 0x##socket##0##channel##dimm
+    // RETA: Returned Buffer
+
+    // _DSM Interface for Byte Addressable Energy Backed Function Class, Function Interface 1
+    If (LEqual (Arg0, ToUUID ("1EE68B36-D4BD-4a1a-9A16-4F8E53D46E05"))) {   // Make sure correct UUID
+      If (LEqual (ToInteger (Arg1), 1)) {                                  // Make sure revision is 1
+        If (LEqual (ToInteger (Arg2), 0)) {
+          Return (Buffer() {0xff, 0xff, 0xff, 0xff})
+        }
+
+        // Only process the supported function indexes
+        If (LLess (ToInteger (Arg2), 32)) {
+          // Store Function Index and NFIT Device Handle (DIMM location)
+          Store (ToInteger (Arg4), NFHD)            // Store ADR handler
+          Store (ToInteger (Arg2), FUNI)            // Store Function Index
+
+          Store (0xFEC20340, Local0)                // Store all SET functions
+          Store (0x00000001, Local1)
+          ShiftLeft (Local1, FUNI, Local1)
+
+          And (Local0, Local1, Local0)
+          If (LGreater(Local0, 0)) {
+            Store (ToInteger (Arg3), INPL)          // Store input length
+            CreateField (DeRefOf (Index (Arg3, 0)), 0x00, Multiply (INPL, 8), IBUF) // Create Input buffer
+            Mid (IBUF, 0, INPL, INPB)
+          }
+
+          Store (4, NFST)                                  // Assume Function ERROR
+
+          // Generate SMI
+          Store (0xFD, SMIC)
+
+          // Create Return Buffer
+          // We need to include Output Length & Status in the Output Buffer
+          Name (RETA, Buffer (Add (OUTL, 4)) {} )
+
+          // Update Status from ACPI Exchange
+          CreateDwordField (RETA, 0x00, STAA) // Status
+          Store (NFST, STAA)
+
+          // Copy buffer from OUTL length in bytes starting at DATA (offset 4 bytes from Buffer)
+          If (LNotEqual (OUTL, 0)) {
+            CreateField (RETA, 0x20, Multiply (OUTL, 8), DATA)
+            Mid (OUTB, 0, OUTL, DATA)
+          }
+          //Else {
+          //       If (LNotEqual (NFST, 0)) {
+          //              If (LEqual (FUNI, 10)) {
+          //                     Name (RETB, Buffer (5) {0x00, 0x00, 0x00, 0x00, 0x00} )
+          //                     Return (RETB)
+          //              }
+
+          //              If (LEqual (FUNI, 11)) {
+          //                     Name (RETC, Buffer (13) {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x1C, 0x0A, 0x0A, 0x63, 0x00, 0x00} )
+          //                     Return (RETC)
+          //              }
+
+          //              If (LEqual (FUNI, 12)) {
+          //                     Name (RETD, Buffer (11) {0x00, 0x00, 0x00, 0x00, 0x64, 0x1C, 0x1C, 0x02, 0x02, 0x00, 0x00} )
+          //                     Return (RETD)
+          //              }
+          //       }
+          // }
+
+          // Return buffer
+          Return (RETA)
+        } // if func valid
+
+        Return (Buffer() {0x01})      // Indicate command not supported (invalid func)
+      } // if revision 1
+
+      Return (Buffer() {0x01})    // Indicate command not supported (invalid revision)
+    } // GUID Check
+
+    Return (Buffer() {0x01})           // Indicate command not supported (invalid GUID)
+  } // End of Method
+
+  //
+  // Root DSM implementation
+  //
+  Method (JNRD, 4, Serialized) {
+    // CR commands supported
+    // Function Index 1 - Query Address range scrubbing capabilities
+    // Input - 16 bytes (ARS Start SPA Address - 8 bytes, ARS Length - 8 bytes)
+    // Output - 8 bytes (Status - 4 bytes, Max ARS Data Size)
+    //
+    // Function Index 2 - Start address range scrubbing
+    // Input - 24 bytes (ARS Start Address - 8 bytes, ARS length - 8 bytes, Type - 2 bytes, Flags - 1 byte, Reserved - 5 bytes)
+    // Output - 8 bytes (Status - 4 bytes, Estimated Time for Scrub - 4 bytes)
+    //
+    // Function Index 3 - Query Adress range scrubbing status
+    // Input - NULL
+    // Output - varies (Status - 4 bytes, ARS Data - 4k)
+    //
+    // Function Index 4 - Clear Uncorrectable Error
+    // Input - 16 bytes (Clear Uncorrectable Error SPA Range Base - 8 bytes, Clear Uncorrectable Error Range Length - 8 bytes)
+    // Output - 16 bytes (Status - 4 bytes, Reserved - 4 bytes, Cleared Uncorrectable Error Range Length - 8 bytes)
+
+    If (LEqual (Arg0, ToUUID ("2F10E7A4-9E91-11E4-89D3-123B93F75CBA"))) {  // Make sure correct UUID
+      If (LEqual (ToInteger (Arg1), 1)) {                                  // Make sure revision is 1
+        If (LEqual (ToInteger (Arg2), 0)) {
+            //0,1,2,3,4 function is supported
+            Return (Buffer() {0x1F})
+        }
+
+        // Only process the supported function indexes
+        If (LLessEqual (ToInteger (Arg2), 4)) {
+          // Store Function Index and NFIT Device Handle
+          Store (ToInteger (Arg2), FUNI)
+          Store (0xFFFFFFFF, NFHD)  // Specify call is being made from NVDR
+
+          // Map Arg3 into separate elements of structure
+          If (LOr (LEqual (FUNI, 1), LOr (LEqual (FUNI, 2), LEqual (FUNI, 4)))) {
+            // Function Index 1 - Query Address range scrubbing capabilities
+            // Function Index 2 - Start address range scrubbing
+            // Function Index 4 - Clear Uncorrectable Error
+            CreateQwordField (DeRefOf (Index (Arg3, 0)), 0x00, ASTA)  // ARS Start Address
+            CreateQwordField (DeRefOf (Index (Arg3, 0)), 0x08, ALEN)  // ARS Length
+            Store (ASTA, ARSA)
+            Store (ALEN, ARSL)
+
+          }
+
+          If (LEqual (FUNI, 2)) {
+            // Function Index 2 - Start address range scrubbing
+            CreateWordField (DeRefOf (Index (Arg3, 0)), 0x10, ATYP) // ARS Type
+            CreateByteField (DeRefOf (Index (Arg3, 0)), 0x12, AFLA) // ARS Flags
+            Store (ATYP, ARST)
+            Store (AFLA, ARSF)
+          }
+
+          // Generate SMI
+          Store (0xFD, SMIC)
+
+          // Create Return Buffer
+          Name (RETB, Buffer (Add (OUTL, 4)) {} )
+
+          // Update Status
+          CreateDwordField (RETB, 0x00, STAT) // Status
+          Store (NFST, STAT)
+
+          // Copy buffer
+          If (LNotEqual (OUTL, 0)) {
+            CreateField (RETB, 0x20, Multiply (OUTL, 8), DATB)
+            Mid (OUTB, 0, OUTL, DATB)
+          }
+
+          // Return buffer
+          Return (RETB)
+        }
+        Return (Buffer() {0x01}) // Indicate command not supported
+      }
+    }
+    Return (Buffer() {0x02}) // Indicate invalid input parameter (this value is different for root and NVDIMM)
+  }

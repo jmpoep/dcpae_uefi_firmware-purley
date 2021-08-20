@@ -1,0 +1,107 @@
+## @file
+#
+#  Copyright (c) 2009 - 2015, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                   = 0x00010005
+  BASE_NAME                     = AcpiPlatform
+  FILE_GUID                     = 87AB821C-79B8-4ef6-A913-21D22063F55F
+  MODULE_TYPE                   = DXE_DRIVER
+  VERSION_STRING                = 1.0
+  ENTRY_POINT                   = AcpiPlatformEntryPoint
+
+[Sources]
+  AcpiPlatform.c
+  AcpiPlatform.h
+  AcpiPlatformHooks.c
+  AcpiPlatformHooks.h
+  AcpiPlatformVTDHooks.c
+
+[Packages]
+  PurleyPlatPkg/PlatPkg.dec
+  PurleySktPkg/SocketPkg.dec
+  ServerCommonPkg/ServerCommonPkg.dec
+  PurleySktPkg/Override/IA32FamilyCpuPkg/IA32FamilyCpuPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec ##
+  PurleySktPkg/SouthClusterLbg/PchRcPkg.dec
+  IA32FamilyCpuPkg/IA32FamilyCpuPkg.dec
+  CpPlatPkg/CpPlatPkg.dec
+
+[LibraryClasses]
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  BaseMemoryLib
+  DebugLib
+  UefiLib
+  UefiRuntimeServicesTableLib
+  HobLib
+  PciLib
+  PciExpressLib
+  CpuConfigLib
+  SetupLib
+  PlatformHooksLib
+  AcpiPlatformTableLib
+  FpgaConfigurationLib
+  
+[Protocols]
+  gEfiLpcPolicyProtocolGuid
+  gEfiMpServiceProtocolGuid
+  gEfiIioUdsProtocolGuid
+  gEfiGlobalNvsAreaProtocolGuid
+  gEfiPciIoProtocolGuid
+  gEfiFirmwareVolume2ProtocolGuid
+  gEfiAcpiSupportProtocolGuid
+  gEfiSerialIoProtocolGuid
+  gDxeEnhancedSpeedstepProtocolGuid
+  gEfiPlatformTypeProtocolGuid
+  gEfiDmaRemapProtocolGuid
+  gEfiRasfSupportProtocolGuid
+  gEfiCpuCsrAccessGuid
+  gEfiCrystalRidgeGuid
+  gEfiSmbiosProtocolGuid
+  gEfiIioSystemProtocolGuid
+  gEfiSvSmmProtocolGuid
+  gEfiPciRootBridgeIoProtocolGuid
+  gEfiDxeSystemBoardProtocolGuid
+  gEfiNvdimmAcpiSmmInterfaceProtocolGuid
+
+[Guids]
+  gEfiGlobalVariableGuid
+  gEfiAcpiTableStorageGuid
+  gEfiMemoryMapGuid
+  gEfiPcAnsiGuid
+  gEfiVT100PlusGuid
+  gEfiVT100Guid
+  gEfiVTUTF8Guid
+  gEfiHobListGuid
+  gEfiPlatformInfoGuid
+  gEfiSetupVariableGuid
+  gEfiPchRcVariableGuid
+  gEfiSocketIioVariableGuid
+  gEfiSocketMemoryVariableGuid
+  gEfiSocketCommonRcVariableGuid
+  gEfiSocketMpLinkVariableGuid
+  gEfiSocketPowermanagementVarGuid
+  gEfiSocketProcessorCoreVarGuid
+
+[Pcd]
+  gPlatformTokenSpaceGuid.PcdAcpiOemId
+  gPlatformTokenSpaceGuid.PcdAcpiTableOemId
+
+[Depex]
+  gEfiAcpiSupportProtocolGuid AND
+  gEfiMpServiceProtocolGuid AND
+  gEfiIioSystemProtocolGuid
+

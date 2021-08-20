@@ -1,0 +1,93 @@
+##=================================================================================================
+##########                       Template  Notes                                         ##########
+##=================================================================================================
+##
+####                             Note: zzzzz is Platform ChangeList Number                     ####
+####                                   yyyyy is Platform HSD number                            ####
+####                                   xxxxx is EDKII HSD number                               ####
+####                                   uuuuu is Code Review Number                             ####
+####                                   CC_SERVER is Code Collaborator server URL               ####
+##=================================================================================================
+##
+##  Override text File format definitions:
+##                           Unless in a data field, white space is ignored.
+##                           Line starting with '#' is comment
+##                           Text between () are local line comments
+##                           Data field name is defined by ..NAME..
+##                           Data follows :: till end of line for single line fields
+##                           Data for multi line fields (Name ends with _Begin / _End
+##                                Is all lines between _Begin / End exclusive of the name lines.
+##
+## Valid entries for Limitations, ####
+## Use exact text, separated by comma's
+##
+##  LimitationText    Explanation
+##
+##  PlatformCode      Platform code references
+##  ReferanceCode     Si Reference code references
+##  ServerCommonCode  BP core code that contains ServerCommon references
+##
+##(Full Description of the override reason follows) ####
+## Better to put too much information here than too little
+##   Why is override needed
+##   Why it can not be done in Platform code
+##
+##=================================================================================================
+##  Multiple Overrides in a single driver:
+##
+##    Every Override should have all of the template filled out, if there are multiple overrides
+##     in a single driver, copy the template section and add to the end of the file.
+##     i.e. like this:
+##
+##    Template Notes
+##
+##    Start of Template
+##      Override 1
+##    End of Template
+##    Start of Template
+##      Override 2
+##    End of Template
+##     ...
+##
+##=================================================================================================
+##   Useful URL's:
+##
+##   Override process for BDE is documented in the "Central Park Operations Guide" (CPOG):
+##     https://sharepoint.amr.ith.intel.com/sites/BDE_BIOS/default.aspx
+##      ->BP Server (aka EDKII)
+##      ->Program Management
+##      ->Central Park Operations Guide
+##
+##
+##=================================================================================================
+##########                       Start of Template                                       ##########
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+##
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                   :: Purley
+..Core Package Name..                   :: IA32FamilyCpuPkg
+..CP Version..                          ::
+..Platform HSD..                        :: s5370672
+..EDKII HSD..                           :: s1375317
+..Platform CL..                         ::
+..Create Date..                         :: 06/10/2016
+..Module Name..                         :: IA32FamilyCpuPkg\CpuArchDxe
+..Override Tag..                        :: PURLEY_OVERIDE_5370672
+..Code Review URL..                     :: https://fm-codecollab.intel.com/ui#review:id=146834
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Override is to change StartupAllAps call for LoadMtrrData into a parallel execution to increase
+  execution speed.
+
+..Description_End..
+
+##=================================================================================================
+##########                       End of Template                                         ##########
+##=================================================================================================

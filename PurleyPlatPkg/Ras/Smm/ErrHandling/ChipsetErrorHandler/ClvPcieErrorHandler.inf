@@ -1,0 +1,89 @@
+#/** @file
+#  Component description file for the PCI Express Error Handler.
+#
+#  Copyright (c) 2009 - 2016, Intel Corporation.
+#  All rights reserved. This software and associated documentation
+#  (if any) is furnished under a license and may only be used or
+#  copied in accordance with the terms of the license.  Except as
+#  permitted by such license, no part of this software or
+#  documentation may be reproduced, stored in a retrieval system, or
+#  transmitted in any form or by any means without the express
+#  written consent of Intel Corporation.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PcieErrorHandler
+  FILE_GUID                      = 7B8A172E-ACF2-41C2-B2AF-065D8454C735
+  MODULE_TYPE                    = DXE_SMM_DRIVER
+  VERSION_STRING                 = 1.0
+  PI_SPECIFICATION_VERSION       = 0x0001000A
+  ENTRY_POINT                    = ClvInitializePcieErrHandler 
+
+[Sources]
+  PcieErrorHandler.c
+  PcieErrorHandler.h
+  ClvPcieErrorHandler.c
+  ClvPcieErrorHandler.h
+  IIoErrorHandler.c
+  IIoErrorHandler.h
+  SbErrorHandler.c
+
+
+[Packages]
+  CpPlatPkg/CpPlatPkg.dec
+  PurleyPlatPkg/PlatPkg.dec
+  PurleySktPkg/SocketPkg.dec
+  CpRcPkg/RcPlatPurley.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ServerCommonPkg/ServerCommonPkg.dec
+  IA32FamilyCpuPkg/IA32FamilyCpuPkg.dec
+  BpCommonPkg/BpCommonPkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec 
+  PurleySktPkg/SouthClusterLbg/PchRcPkg.dec
+
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  DebugLib
+  BaseMemoryLib
+  IoLib
+  BaseLib
+  PciLib
+  UefiRuntimeServicesTableLib
+  SmmServicesTableLib
+  PciExpressLib
+  MpSyncDataLib
+  ChipsetErrReporting
+  PchPcrLib
+  
+[Protocols]
+  gEfiSmmBase2ProtocolGuid
+  gEfiPlatformRasPolicyProtocolGuid
+  gEfiPlatformErrorHandlingProtocolGuid
+  gEfiErrorHandlingProtocolGuid
+  gEfiSmmReadyToLockProtocolGuid
+  gEfiSmmSwDispatch2ProtocolGuid
+  gEfiCpuCsrAccessGuid
+  gEfiSmmGpiDispatch2ProtocolGuid
+  gRasClvPcieErrHandProtocol
+  gEfiIioSystemProtocolGuid
+  
+[Guids]
+  gErrRecordPcieErrGuid 
+  gErrRecordNotifyPcieGuid
+
+[FixedPcd]
+  gEfiCpuTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber
+  gEfiCpRcPkgTokenSpaceGuid.PcdMaxCpuSocketCount
+
+[Depex]
+  gEfiSmmBase2ProtocolGuid AND
+  gEfiErrorHandlingProtocolGuid AND
+  gEfiPlatformRasPolicyProtocolGuid AND
+  gEfiPlatformErrorHandlingProtocolGuid AND
+  gEfiSmmSwDispatch2ProtocolGuid AND
+  gEfiCpuCsrAccessGuid AND
+  gEfiSmmGpiDispatch2ProtocolGuid

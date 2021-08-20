@@ -1,0 +1,75 @@
+# up to client CL_283752
+
+###############################################################################################################################################
+#            CLIENT                                                   ->                              SERVER                                  #
+###############################################################################################################################################
+
+SkylakeSiPkg/Include/SiVersion.h ->                                                           PurleySktPkg/SouthClusterLbg/Include/SiVersion.h
+SkylakeSiPkg/SystemAgent/Include/SaRegs.h ->                                                  PurleySktPkg/SouthClusterLbg/Include/SaRegs.h
+SkylakeSiPkg/Include/Library/SiFviLib.h ->                                                    PurleySktPkg/SouthClusterLbg/Include/Library/SiFviLib.h
+SkylakeSiPkg/Include/Library/AslUpdateLib.h ->                                                PurleySktPkg/SouthClusterLbg/Include/Library/AslUpdateLib.h
+SkylakeSiPkg/Library/DxeAslUpdateLib/DxeAslUpdateLib.c ->                                     PurleySktPkg/SouthClusterLbg/Library/DxeAslUpdateLib/DxeAslUpdateLib.c
+SkylakeSiPkg/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf ->                                   PurleySktPkg/SouthClusterLbg/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf
+SkylakeSiPkg/SiInit/Pei/SiInit.c ->                                                           PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInit.c
+SkylakeSiPkg/SiInit/Pei/SiInit.h ->                                                           PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInit.h
+SkylakeSiPkg/SiInit/Pei/SiInit.inf ->                                                         PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInit.inf
+SkylakeSiPkg/SiInit/Pei/SiInitPreMem.c ->                                                     PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInitPreMem.c
+SkylakeSiPkg/SiInit/Pei/SiInitPreMem.h ->                                                     PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInitPreMem.h
+SkylakeSiPkg/SiInit/Pei/SiInitPreMem.inf ->                                                   PurleySktPkg/SouthClusterLbg/SiInit/Pei/SiInitPreMem.inf
+SkylakeSiPkg/Include/PcieRegs.h ->                                                            PurleySktPkg/SouthClusterLbg/Include/PcieRegs.h
+SkylakePlatSamplePkg/Include/FirwmareConfigurations.h ->                                      PurleyPlatPkg/Include/FirwmareConfigurations.h
+
+ClientCommonPkg/Include/Library/TraceHubLib.h ->                                              PurleyPlatPkg/Include/Library/TraceHubLib.h
+ClientCommonPkg/Include/Library/TraceHubDebugLib.h ->                                         PurleyPlatPkg/Include/Library/TraceHubDebugLib.h
+ClientCommonPkg/Library/BaseTraceHubDebugLibNull/BaseTraceHubDebugLibNull.inf ->              PurleyPlatPkg/Library/BaseTraceHubDebugLibNull/BaseTraceHubDebugLibNull.inf
+ClientCommonPkg/Library/BaseTraceHubDebugLibNull/BaseTraceHubDebugLibNull.c ->                PurleyPlatPkg/Library/BaseTraceHubDebugLibNull/BaseTraceHubDebugLibNull.c
+ClientCommonPkg/Library/BaseTraceHubLibNull/BaseTraceHubLibNull.inf ->                        PurleyPlatPkg/Library/BaseTraceHubLibNull/BaseTraceHubLibNull.inf
+ClientCommonPkg/Library/BaseTraceHubLibNull/BaseTraceHubLibNull.c ->                          PurleyPlatPkg/Library/BaseTraceHubLibNull/BaseTraceHubLibNull.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/sventx.h ->                               PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/sventx.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/api.h ->                                  PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/api.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/compiler.h ->                             PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/compiler.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/crc32.h ->                                PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/crc32.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/devh.h ->                                 PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/devh.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/event.h ->                                PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/event.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/inline.h ->                               PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/inline.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/sventx_platform.h ->                      PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/sventx_platform.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/sventx_platform_config.h ->               PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/sventx_platform_config.h
+ClientCommonPkg/Library/BaseTraceHubDebugLib/DxeSmmTraceHubDebugLib.c ->                      PurleyPlatPkg/Library/BaseTraceHubDebugLib/DxeSmmTraceHubDebugLib.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/BaseTraceHubDebugLib.inf ->                      PurleyPlatPkg/Library/BaseTraceHubDebugLib/BaseTraceHubDebugLib.inf
+ClientCommonPkg/Library/BaseTraceHubDebugLib/PeiTraceHubDebugLib.c ->                         PurleyPlatPkg/Library/BaseTraceHubDebugLib/PeiTraceHubDebugLib.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/PatchHowTo.txt ->                                PurleyPlatPkg/Library/BaseTraceHubDebugLib/PatchHowTo.txt
+
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/platform/UEFI/src/sventx_platform.c ->    PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/platform/UEFI/src/sventx_platform.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_api.c ->                       PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_api.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_compiler.c ->                  PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_compiler.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_crc32.c ->                     PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_crc32.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_init.c ->                      PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_init.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_inline.c ->                    PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_inline.c
+ClientCommonPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_write.c ->                     PurleyPlatPkg/Library/BaseTraceHubDebugLib/sventx/src/sventx_write.c
+
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.c ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.h ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.h
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.inf ->   PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeHandlerPei.inf
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeWorkerPei.c ->      PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeWorkerPei.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeWorkerPei.h ->      PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Pei/TraceHubStatusCodeWorkerPei.h
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.c ->    PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.h ->    PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.h
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.inf ->  PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeHandlerRuntimeDxe.inf
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeWorkerRuntimeDxe.c ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeWorkerRuntimeDxe.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeWorkerRuntimeDxe.h ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/RuntimeDxe/TraceHubStatusCodeWorkerRuntimeDxe.h
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.c ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.h ->     PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.h
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.inf ->   PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeHandlerSmm.inf
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeWorkerSmm.c ->      PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeWorkerSmm.c
+ClientCommonPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeWorkerSmm.h ->      PurleyPlatPkg/Universal/TraceHubStatusCodeHandler/Smm/TraceHubStatusCodeWorkerSmm.h
+
+###############################################################################################################################################
+#                                               PCH Reference Code Documentation File                                                         #
+SkylakeSiPkg/DoxygenInternalOnly/DoxygenSiPch.h ->                                            PurleyPlatPkg/Tool/doxygen/DoxygenPchRc.dox
+#                                                                                                                                             #
+###############################################################################################################################################
+
+################################################################ Backup #######################################################################
+#ClientCommonPkg/Library/BasePlatformPostCodeMapLib/BasePlatformPostCodeMapLib.c ->            PurleyPlatPkg/Library/BasePlatformPostCodeMapLib/BasePlatformPostCodeMapLib.c
+#ClientCommonPkg/Library/BasePlatformPostCodeMapLib/BasePlatformPostCodeMapLib.inf ->          PurleyPlatPkg/Library/BasePlatformPostCodeMapLib/BasePlatformPostCodeMapLib.inf
+#ClientCommonPkg/Library/BasePlatformPostCodeMapLib/PlatformStatusCodesInternal.h ->           PurleyPlatPkg/Library/BasePlatformPostCodeMapLib/PlatformStatusCodesInternal.h

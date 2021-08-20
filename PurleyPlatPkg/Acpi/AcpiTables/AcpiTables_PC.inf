@@ -1,0 +1,68 @@
+## @file
+#
+#  Copyright (c) 2009 - 2018, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PlatformAcpiTable
+  FILE_GUID                      = 7E374E25-8E01-4FEE-87F2-390C23C606CD
+  MODULE_TYPE                    = USER_DEFINED
+  VERSION_STRING                 = 1.0
+
+[Sources]
+  Fadt/Fadt5.aslc
+  Facs/Facs5.aslc
+  Dsdt/EPRPPlatform.asl
+  Dsdt/EXRPPlatform.asl
+  Dsdt/WFPPlatform.asl
+  Dsdt/BNPPlatform.asl
+  Dsdt/STPPlatform.asl
+  Dsdt/BMPPlatform.asl
+  Dsdt/WFRPlatform.asl
+  Madt/Madt4.aslc
+  Mcfg/Mcfg.aslc
+  Rasf/Rasf.aslc  
+  Hpet/Hpet.aslc
+  HMAT/Hmat.aslc
+  NFIT/Nfit.aslc
+  PCAT/Pcat.aslc
+  SLIT/Slit1.aslc
+  SRAT/Srat2.aslc
+  SPCR/Spcr.aslc
+  Ssdt/CpuPm.asl
+  Ssdt/CpuEist.asl
+  Ssdt/CpuHwp.asl
+  Ssdt/CpuTst.asl
+  Ssdt/CpuCst.asl
+  Msct/Msct.aslc
+  Pcct/Pcct.aslc
+  Wddt/Wddt1.0.aslc
+  Svos/Svos.aslc
+  Spmi/Spmi.aslc
+  Pmtt/Pmtt.aslc
+  Wsmt/Wsmt.aslc
+
+[Packages]
+  MdePkg/MdePkg.dec
+  CpRcPkg/CpRcPkg.dec
+  PurleySktPkg/SouthClusterLbg/PchRcPkg.dec
+  PurleyPlatPkg/PlatPkg.dec
+  PurleySktPkg/SocketPkg.dec
+
+[FixedPcd]
+  gEfiCpRcPkgTokenSpaceGuid.PcdMaxCpuSocketCount
+
+[BuildOptions]  
+  *_*_*_ASL_FLAGS = -ve -oi
+
+

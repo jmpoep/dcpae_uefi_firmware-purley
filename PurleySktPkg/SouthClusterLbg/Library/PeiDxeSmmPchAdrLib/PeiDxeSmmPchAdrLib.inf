@@ -1,0 +1,62 @@
+## @file
+# Component description file for the PeiDxeSmmPchAdrLib
+#
+# @copyright
+# Copyright (c) 2017 Intel Corporation. All rights reserved
+# This software and associated documentation (if any) is furnished
+# under a license and may only be used or copied in accordance
+# with the terms of the license. Except as permitted by the
+# license, no part of this software or documentation may be
+# reproduced, stored in a retrieval system, or transmitted in any
+# form or by any means without the express written consent of
+# Intel Corporation.
+# This file contains an 'Intel Peripheral Driver' and is uniquely
+# identified as "Intel Reference Module" and is licensed for Intel
+# CPUs and chipsets under the terms of your license agreement with
+# Intel or your vendor. This file may be modified by the user, subject
+# to additional terms of the license agreement.
+#
+# @par Specification Reference:
+#
+##
+
+[Defines]
+  INF_VERSION = 0x00010017
+  BASE_NAME = PeiDxeSmmPchAdrLib
+  FILE_GUID = AC6F645C-D91F-4709-B447-9173378163EB
+  VERSION_STRING = 1.0
+  MODULE_TYPE = BASE
+  LIBRARY_CLASS = PchAdrLib
+
+[LibraryClasses]
+  DebugLib
+  MmPciLib
+  IoLib
+  PchCycleDecodingLib
+
+[LibraryClasses.X64]
+  HobLib
+
+[LibraryClasses.IA32]
+  PeiServicesLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  CpRcPkg/CpRcPkg.dec
+  PurleySktPkg/SouthClusterLbg/PchRcPkg.dec
+
+[Sources]
+  PchAdrLib.c
+  PchAdrConfig.h
+
+[Sources.X64]
+  DxePchAdrConfig.c
+
+[Sources.IA32]
+  PeiPchAdrConfig.c
+
+[Ppis]
+  gPchPlatformPolicyPpiGuid
+
+[Guids]
+  gPchPolicyHobGuid

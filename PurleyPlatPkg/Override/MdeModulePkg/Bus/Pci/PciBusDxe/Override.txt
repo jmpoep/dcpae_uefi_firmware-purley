@@ -1,0 +1,488 @@
+##=================================================================================================
+##########                       Template  Notes                                         ##########
+##=================================================================================================
+##
+####                             Note: zzzzz is Platform ChangeList Number                     ####
+####                                   yyyyy is Platform HSD number                            ####
+####                                   xxxxx is EDKII HSD number                               ####
+####                                   uuuuu is Code Review Number                             ####
+####                                   CC_SERVER is Code Collaborator server URL               ####
+##=================================================================================================
+##
+##  Override text File format definitions:
+##                           Unless in a data field, white space is ignored.
+##                           Line starting with '#' is comment
+##                           Text between () are local line comments
+##                           Data field name is defined by ..NAME..
+##                           Data follows :: till end of line for single line fields
+##                           Data for multi line fields (Name ends with _Begin / _End
+##                                Is all lines between _Begin / End exclusive of the name lines.
+##
+## Valid entries for Limitations, ####
+## Use exact text, separated by comma's
+##
+##  LimitationText    Explanation
+##
+##  PlatformCode      Platform code references
+##  ReferanceCode     Si Reference code references
+##  ServerCommonCode  BP core code that contains ServerCommon references
+##
+##(Full Description of the override reason follows) ####
+## Better to put too much information here than too little
+##   Why is override needed
+##   Why it can not be done in Platform code
+##
+##=================================================================================================
+##  Multiple Overrides in a single driver:
+##
+##    Every Override should have all of the template filled out, if there are multiple overrides
+##     in a single driver, copy the template section and add to the end of the file.
+##     i.e. like this:
+##
+##    Template Notes
+##
+##    Start of Template
+##      Override 1
+##    End of Template
+##    Start of Template
+##      Override 2
+##    End of Template
+##     ...
+##
+##=================================================================================================
+##   Useful URL's:
+##
+##   Override process for BDE is documented in the "Central Park Operations Guide" (CPOG):
+##     https://sharepoint.amr.ith.intel.com/sites/BDE_BIOS/default.aspx
+##      ->BP Server (aka EDKII)
+##      ->Program Management
+##      ->Central Park Operations Guide
+##
+##
+##=================================================================================================
+##########                       Start of Template                                       ##########
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4927212
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c/h
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Support for LBG's USP\MROM validation
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBus.c, PciBusDxe.inf
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  In PciBusInstallPendingOproms() function, do not run UEFI OpROM in legacy mode for PC BIOS, but still need run UEFI PTU Option ROM (MROM 0 Device) in legacy mode for PC BIOS
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBus.c
+..Override Tag..     			::
+..Code Review URL..  			::
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+##refer to Override text File format definitions above for description
+..Description_Begin..
+  Still need run UEFI PTU Option ROM (MROM 0 Device) in legacy mode for PC BIOS on Purley
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBus.c, PciBusDxe.inf
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Do not run UEFI OpROM in legacy mode for PC BIOS
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4926571
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c, PciOptionRomSupport.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  provide setup options to hide/unhide devices on LBG
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s2502782
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumerator.c, PciEnumeratorSupport.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Sync client code to CL_123616
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4926588
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  support additional field to configure all different values from ADR timer
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBus.h, PciEnumerator.c
+..Override Tag..     			::
+..Code Review URL..  			::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  SKX Hybrid mode support
+
+..Description_End..
+
+##-------------------------------------------------------------------------------------------------
+..Original Platform..     :: Purley
+..Core Package Name..     :: MdeModulePkg
+..CP Version..            ::
+..Platform HSD..          :: s5330499
+..EDKII HSD..             ::
+..Platform CL..           ::
+..Create Date..           ::
+..Module Name..           :: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c
+..Override Tag..          ::
+..Code Review URL..       ::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+ Workaround is due to the silicon bug. The IO bars of ME and IE KT devices have to be aligned 
+ to 16 bytes. It must be done in the enumerator procedures to force allocator to align resources for 
+ those devices
+
+
+..Description_End..
+##-------------------------------------------------------------------------------------------------
+..Original Platform..     :: Purley
+..Core Package Name..     :: MdeModulePkg
+..CP Version..            ::
+..Platform HSD..          :: s5331460
+..EDKII HSD..             ::
+..Platform CL..           ::
+..Create Date..           ::
+..Module Name..           :: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c
+..Override Tag..          :: 5331460_OVERRIDE_STAR/END
+..Code Review URL..       ::
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+ Workaround is due to the silicon bug. SPI controler is not being hidden by LBG A0 Si. Hidding from enumeration process 
+ to no mess up with SPI controller configuration done by BIOS 
+ 
+
+
+..Description_End..
+##-------------------------------------------------------------------------------------------------
+..Original Platform..     :: Purley
+..Core Package Name..     :: MdeModulePkg
+..CP Version..            ::
+..Platform HSD..          :: s5331636
+..EDKII HSD..             ::
+..Platform CL..           :: 281184
+..Create Date..           ::
+..Module Name..           :: MdeModulePkg\Bus\Pci\PciBusDxe\PciDeviceSupport.c
+..Override Tag..          ::
+..Code Review URL..       :: https://fm-codecollab.intel.com/ui#review:id=98327
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+ Point to the right PCD to determine UEFI Optimization
+
+
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: 
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: 219757
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumerator.c, PciEnumeratorSupport.c, PciLib.c
+..Override Tag..     			::
+..Code Review URL..  			:: 
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Sync client code
+
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4930148
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: 220513
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumerator.c, PciEnumeratorSupport.c, PciLib.c
+..Override Tag..     			::
+..Code Review URL..  			:: https://fm-codecollab.intel.com/ui#review:id=76217
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  Restored SPT A0 support
+
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s4930289
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: 226420
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBusDxe.inf
+..Override Tag..     			::
+..Code Review URL..  			:: https://fm-codecollab.intel.com/ui#review:id=76739
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  remove Wellsburg support (build target)
+
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5331882
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: 293289
+..Create Date..      	                ::
+..Module Name..      			:: 
+MdeModulePkg\Bus\Pci\PciBusDxe\PciEnumeratorSupport.c, PciOptionRomSupport.c
+..Override Tag..     			:: 
+..Code Review URL..  			:: https://fm-codecollab.intel.com/ui#review:id=103590
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  SV Configuration options were missing on BIOS 57D11
+  
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: 
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: 
+..Create Date..      	                ::
+..Module Name..      			:: 
+MdeModulePkg\Bus\Pci\PciBusDxe\PciBusDxe.inf,PciResourceSupport.c
+..Override Tag..     			:: #ifdef PC_HOOK or none
+..Code Review URL..  			:: 
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+
+  1. Force the first POST GPU (but excludes ASpeed VGA) with MMIO 32 bit addressing.
+  
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: s5370204
+..EDKII HSD..        	                ::
+..Platform CL..      	                :: TBD
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBusDxe.inf
+..Override Tag..     			:: 
+..Code Review URL..  			:: TBD
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+  Modify driver to not launch OpRoms at enumeration.  Supported/Start modified to detect pending OpRom launch, execute, then connect again.
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                   :: Purley
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..                          ::
+..Platform HSD..                        :: s5370471
+..EDKII HSD..                           ::
+..Platform CL..                         :: TBD
+..Create Date..                         ::
+..Module Name..                         :: MdeModulePkg\Bus\Pci\PciBusDxe\PciBusDxe.inf
+..Override Tag..                        ::
+..Code Review URL..                     :: https://fm-codecollab.intel.com/ui#review:id=159449
+
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+
+##refer to Override text File format definitions above for description
+..Description_Begin..
+  Added conditional (based on setup variable) degradation of XHCI BAR to 32-bit to work around WS2K12 issue.
+..Description_End..
+##=================================================================================================
+##
+..Template Version.. (Do Not Change)                    ::V 00.01.10
+..Original Platform..                 	:: Purley 
+..Core Package Name..                   :: MdeModulePkg
+..CP Version..       		        ::
+..Platform HSD..                        :: N/A
+..EDKII HSD..        	                ::
+..Platform CL..      	                ::
+..Create Date..      	                ::
+..Module Name..      			:: MdeModulePkg\Bus\Pci\PciBusDxe\PciBus.c
+..Override Tag..     			::
+..Code Review URL..  			::
+##refer to Override text File format definitions above for valid limitation entries
+..Limitations..      (Comma Separated List)             ::
+##refer to Override text File format definitions above for description
+..Description_Begin..
+  Need to install EFI_BUS_SPECIFIC_DRIVER_OVERRIDE_PROTOCOL on the Pci device controller.
+..Description_End..
+##=================================================================================================
+##########                       End of Template                                         ##########
+##=================================================================================================

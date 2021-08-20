@@ -1,0 +1,61 @@
+## @file
+# Component description file for the I2C port driver.
+#
+# @copyright
+# Copyright (c) 2018 Intel Corporation. All rights reserved
+# This software and associated documentation (if any) is furnished
+# under a license and may only be used or copied in accordance
+# with the terms of the license. Except as permitted by the
+# license, no part of this software or documentation may be
+# reproduced, stored in a retrieval system, or transmitted in any
+# form or by any means without the express written consent of
+# Intel Corporation.
+# This file contains an 'Intel Peripheral Driver' and is uniquely
+# identified as "Intel Reference Module" and is licensed for Intel
+# CPUs and chipsets under the terms of your license agreement with
+# Intel or your vendor. This file may be modified by the user, subject
+# to additional terms of the license agreement.
+# 
+# @par Specification Reference:
+#
+##
+
+[Defines]
+INF_VERSION = 0x00010017
+BASE_NAME = PeiI2cMasterLib
+FILE_GUID = 417D1EA4-D722-4a4c-96C4-7D5DB305F515
+VERSION_STRING = 1.0
+MODULE_TYPE = PEIM
+LIBRARY_CLASS = PeiI2cMasterLib
+
+[LibraryClasses]
+PeimEntryPoint
+DebugLib
+PeiServicesLib
+IoLib
+# SERVER_FLAG PciLib
+MmPciLib
+TimerLib
+PchInfoLib
+PeiDxeI2cMasterCommonLib
+
+[Packages]
+SkylakeSiPkg/SiPkg.dec
+SkylakeSiPkg/SkylakeSiPrivate.dec
+MdePkg/MdePkg.dec
+
+[Ppis]
+gEfiPeiI2cMasterPpiGuid ## PRODUCED
+
+[Sources]
+I2cMasterPei.c
+
+[Guids]
+gI2c0MasterGuid 
+gI2c1MasterGuid 
+gI2c2MasterGuid 
+gI2c3MasterGuid 
+gI2c4MasterGuid 
+gI2c5MasterGuid
+
+
